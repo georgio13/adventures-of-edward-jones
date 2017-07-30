@@ -4,19 +4,17 @@ using UnityEngine.EventSystems;
 
 public class Background : MonoBehaviour, IPointerDownHandler
 {
-    private Item[] items;
-
-    void Awake()
-    {
-        items = FindObjectsOfType<Item>();
-    }
+    private GameplayObject[] items;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        ActionButtons.instance.TurnOff();
-        SubtitlesPanel.instance.TurnOff();
+        if (!SubtitlesPanel.instance.isActiveAndEnabled)
+        {
+            items = FindObjectsOfType<GameplayObject>();
+            ActionButtons.instance.TurnOff();
 
-        for (int i = 0; i < items.Length; i++)
-            items[i].GetComponent<Image>().raycastTarget = true;
+            for (int i = 0; i < items.Length; i++)
+                items[i].GetComponent<Image>().raycastTarget = true;
+        }
     }
 }

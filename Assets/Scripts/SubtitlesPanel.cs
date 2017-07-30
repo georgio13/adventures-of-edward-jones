@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class SubtitlesPanel : MonoBehaviour
@@ -17,8 +16,7 @@ public class SubtitlesPanel : MonoBehaviour
 
     public void TurnOn(GameplayObject selectedItem, string subtitleText)
     {
-        if (!instance.gameObject.activeSelf)
-            instance.gameObject.SetActive(true);
+        instance.gameObject.SetActive(true);
 
         textReference.GetComponent<Text>().text = subtitleText;
         subtitleSound = selectedItem.GetComponent<AudioSource>();
@@ -28,8 +26,7 @@ public class SubtitlesPanel : MonoBehaviour
 
     public void TurnOn(GameplayObject selectedItem, string[] subtitlesText, AudioClip[] subtitlesSound)
     {
-        if (!instance.gameObject.activeSelf)
-            instance.gameObject.SetActive(true);
+        instance.gameObject.SetActive(true);
 
         subtitleSound = selectedItem.GetComponent<AudioSource>();
 
@@ -44,8 +41,10 @@ public class SubtitlesPanel : MonoBehaviour
 
     public void TurnOff()
     {
-        if (instance.gameObject.activeSelf)
-            instance.gameObject.SetActive(false);
+        instance.gameObject.SetActive(false);
+
+        for (int i = 0; i < ActionButtons.gameplayObjects.Length; i++)
+            ActionButtons.gameplayObjects[i].GetComponent<Image>().raycastTarget = true;
     }
 
     private void ClearSubtitles()

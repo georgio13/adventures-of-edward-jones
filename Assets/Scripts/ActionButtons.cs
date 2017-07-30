@@ -4,40 +4,46 @@ using UnityEngine.UI;
 public class ActionButtons : MonoBehaviour
 {
     public static ActionButtons instance;
+
     private Button observationButton;
     private Button pickUpButton;
     private Button dialogueButton;
     private Button interactiveItemButton;
-    private Item[] items;
-    private GameplayObject itemToCall;
+
+    public static GameplayObject[] gameplayObjects;
+    private GameplayObject selectedGameplayObject;
 
     void Awake()
     {
         instance = this;
         instance.gameObject.SetActive(false);
+
         observationButton = transform.GetChild(1).GetComponent<Button>();
-        observationButton.onClick.AddListener(ReadObservationText);
+        observationButton.onClick.AddListener(ObservationAction);
+
         pickUpButton = transform.GetChild(2).GetComponent<Button>();
-        pickUpButton.onClick.AddListener(AddToInventory);
+        pickUpButton.onClick.AddListener(InventoryAction);
+
         dialogueButton = transform.GetChild(3).GetComponent<Button>();
-        dialogueButton.onClick.AddListener(ReadDialogueText);
+        dialogueButton.onClick.AddListener(DialogueAction);
+
         interactiveItemButton = transform.GetChild(4).GetComponent<Button>();
-        //interactiveItemButton.onClick.AddListener(AddToInventory);
+        interactiveItemButton.onClick.AddListener(InteractiveItemAction);
     }
 
-    public void TurnOn(GameplayObject itemToCall)
+    public void TurnOn(GameplayObject selectedGameplayObject)
     {
-        items = FindObjectsOfType<Item>();
+        gameplayObjects = FindObjectsOfType<GameplayObject>();
 
         if (!instance.gameObject.activeSelf)
             instance.gameObject.SetActive(true);
         else
         {
-            for (int i = 0; i < items.Length; i++)
-                items[i].GetComponent<Image>().raycastTarget = true;
+            for (int i = 0; i < gameplayObjects.Length; i++)
+                gameplayObjects[i].GetComponent<Image>().raycastTarget = true;
         }
 
-        this.itemToCall = itemToCall;
+        this.selectedGameplayObject = selectedGameplayObject;
     }
 
     public void TurnOff()
@@ -51,34 +57,38 @@ public class ActionButtons : MonoBehaviour
         instance.transform.position = position;
     }
 
-    void ReadObservationText()
+    void ObservationAction()
     {
         TurnOff();
 
-        itemToCall.TransferObservation();
+        for (int i = 0; i < gameplayObjects.Length; i++)
+            gameplayObjects[i].GetComponent<Image>().raycastTarget = false;
 
-        for (int i = 0; i < items.Length; i++)
-            items[i].GetComponent<Image>().raycastTarget = false;
+        selectedGameplayObject.TransferObservation();
     }
 
-    void AddToInventory()
+    void InventoryAction()
     {
         TurnOff();
-        //int id = itemCall.transform.GetComponent<Item>().id;
-        //string title = itemText;
-        //string description = itemCall.transform.GetComponent<Item>().description;
-        //Sprite itemImage = itemCall.transform.GetComponent<Item>().itemImage;
-        //Inventory.instance.AddElement(id, title, description, itemImage);
-        //Destroy(itemCall);
+
+        for (int i = 0; i < gameplayObjects.Length; i++)
+            gameplayObjects[i].GetComponent<Image>().raycastTarget = false;
+
+        selectedGameplayObject.TransferInventory();
     }
 
-    void ReadDialogueText()
+    void DialogueAction()
     {
         TurnOff();
 
-        itemToCall.TransferDialogue();
+        for (int i = 0; i < gameplayObjects.Length; i++)
+            gameplayObjects[i].GetComponent<Image>().raycastTarget = false;
 
-        for (int i = 0; i < items.Length; i++)
-            items[i].GetComponent<Image>().raycastTarget = false;
+        selectedGameplayObject.TransferDialogue();
+    }
+
+    void InteractiveItemAction()
+    {
+
     }
 }

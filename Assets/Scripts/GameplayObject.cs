@@ -5,13 +5,15 @@ using UnityEngine.EventSystems;
 public abstract class GameplayObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     private GameObject textReference;
+
     public string observationText;
     public AudioClip observationClip;
-    private bool isInventoryItem;
-    private string inventoryInteractionText;
-    private AudioClip inventoryInteractionSound;
-    private string interactiveText;
-    private AudioClip interactiveSound;
+
+    public string inventoryInteractionText;
+    public AudioClip inventoryInteractionSound;
+
+    public string interactiveText;
+    public AudioClip interactiveSound;
 
     void Awake()
     {
@@ -43,5 +45,9 @@ public abstract class GameplayObject : MonoBehaviour, IPointerEnterHandler, IPoi
         SubtitlesPanel.instance.TurnOn(this, observationText);
     }
 
+    public abstract void TransferInventory();
+
     public abstract void TransferDialogue();
+
+    public abstract void TransferInteractive();
 }

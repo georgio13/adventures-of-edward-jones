@@ -1,24 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class SlotItem : MonoBehaviour
+public class SlotItem : MonoBehaviour, IPointerDownHandler
 {
-    public int id;
     public string title;
-    public string description;
-    public Sprite image;
+    private Sprite slotImage;
 
-    public SlotItem()
+    public SlotItem(string title)
     {
-        id = -1;
-        title = "";
-        description = "";
+        this.title = title;
     }
 
-    public SlotItem(int id, string title, string description, Sprite image)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.image = image;
+        slotImage = transform.GetComponent<Image>().sprite;
+
+        if (!slotImage.Equals(null))
+        {
+            InventoryPanel.activeItem.sprite = slotImage;
+            InventoryPanel.activeItem.color = Color.white;
+            Inventory.instance.TurnOff();
+        }
     }
 }
