@@ -84,10 +84,13 @@
     <Compile Include="Assets\Scripts\ActionButtons.cs" />
     <Compile Include="Assets\Scripts\Background.cs" />
     <Compile Include="Assets\Scripts\Character.cs" />
+    <Compile Include="Assets\Scripts\FirstSceneManager.cs" />
     <Compile Include="Assets\Scripts\GameplayObject.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\InventoryPanel.cs" />
     <Compile Include="Assets\Scripts\Item.cs" />
+    <Compile Include="Assets\Scripts\MainMenuManager.cs" />
+    <Compile Include="Assets\Scripts\MenuButton.cs" />
     <Compile Include="Assets\Scripts\SlotItem.cs" />
     <Compile Include="Assets\Scripts\SubtitlesPanel.cs" />
   </ItemGroup>

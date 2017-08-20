@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class SubtitlesPanel : MonoBehaviour
@@ -30,13 +31,7 @@ public class SubtitlesPanel : MonoBehaviour
 
         subtitleSound = selectedItem.GetComponent<AudioSource>();
 
-        for (int i = 0; i < subtitlesText.Length; i++)
-        {
-            textReference.GetComponent<Text>().text = subtitlesText[i];
-            subtitleSound.GetComponent<AudioSource>().clip = subtitlesSound[i];
-            subtitleSound.Play();
-            Invoke("ClearSubtitles", subtitleSound.clip.length);
-        }
+        StartCoroutine(PlayDialogue(subtitlesText, subtitlesSound));
     }
 
     public void TurnOff()
@@ -47,8 +42,16 @@ public class SubtitlesPanel : MonoBehaviour
             ActionButtons.gameplayObjects[i].GetComponent<Image>().raycastTarget = true;
     }
 
-    private void ClearSubtitles()
+    IEnumerator PlayDialogue(string[] subtitlesText, AudioClip[] subtitlesSound)
     {
-        textReference.GetComponent<Text>().text = "";
+        for (int i = 0; i < subtitlesText.Length; i++)
+        {
+            textReference.GetComponent<Text>().text = subtitlesText[i];
+            subtitleSound.GetComponent<AudioSource>().clip = subtitlesSound[i];
+            subtitleSound.Play();
+            yield return new WaitForSeconds(subtitleSound.clip.length);
+        }
+
+        TurnOff();
     }
 }
