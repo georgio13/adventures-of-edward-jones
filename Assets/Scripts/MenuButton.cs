@@ -10,12 +10,11 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public AudioClip buttonClick;
     public Color32 startColor;
     public Color32 hoverColor;
-    public Color32 clickColor;
 
     void Awake()
     {
         textReference = transform.gameObject;
-        buttonsAudio = GameObject.Find("ButtonsSFX").GetComponent<AudioSource>();
+        buttonsAudio = GameObject.Find("SoundEffects").GetComponent<AudioSource>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -32,8 +31,8 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerClick()
     {
-        textReference.GetComponent<Text>().color = clickColor;
         buttonsAudio.clip = buttonClick;
         buttonsAudio.Play();
+        textReference.GetComponent<Text>().color = startColor;
     }
 }
