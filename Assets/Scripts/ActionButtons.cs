@@ -1,18 +1,32 @@
-﻿using UnityEngine;
+﻿/**----------------------------------------------------------------
+ *  Author:         Yorgos Chatziparaskevas
+ *  Written:        11/9/2017
+ *  Last updated:   11/9/2017
+ *
+ *  File:           ActionButtons.cs
+ *
+ *  This class implements the all the functions of Action Buttons.
+ *
+ *----------------------------------------------------------------*/
+
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ActionButtons : MonoBehaviour
 {
-    public static ActionButtons instance;
+    public static ActionButtons instance;               // We create an instance of Action Buttons.
+    private Button observationButton;                   // This is the reference to the observation button.
+    private Button pickUpButton;                        // This is the reference to the inventory button.
+    private Button dialogueButton;                      // This is the reference to the dialogue button.
+    private Button interactiveItemButton;               // This is the reference to the interraction button.
+    public static GameplayObject[] gameplayObjects;     // This array contains all GameplayObjects which there are to the scene.
+    private GameplayObject selectedGameplayObject;      // This is the selected GameplayObject.
 
-    private Button observationButton;
-    private Button pickUpButton;
-    private Button dialogueButton;
-    private Button interactiveItemButton;
-
-    public static GameplayObject[] gameplayObjects;
-    private GameplayObject selectedGameplayObject;
-
+    /// <summary>
+    /// When we initialize Actions Buttons, we have to get the reference to them
+    /// and them hide their panel. We also must take the reference to all four 
+    /// buttons of Action Buttons panel and add to each of them a listener.
+    /// </summary>
     void Awake()
     {
         instance = this;
@@ -31,6 +45,13 @@ public class ActionButtons : MonoBehaviour
         interactiveItemButton.onClick.AddListener(InteractiveItemAction);
     }
 
+    /// <summary>
+    /// When we want to show the Action Buttons panel, we have to check
+    /// if it is already open and if it isn't to show it. Also, we have
+    /// to enable all the other GameplayObjects of the scene so they 
+    /// can be clicked.
+    /// </summary>
+    /// <param name="selectedGameplayObject">The GameplayObject that just has been clicked.</param>
     public void TurnOn(GameplayObject selectedGameplayObject)
     {
         gameplayObjects = FindObjectsOfType<GameplayObject>();
@@ -46,17 +67,33 @@ public class ActionButtons : MonoBehaviour
         this.selectedGameplayObject = selectedGameplayObject;
     }
 
+    /// <summary>
+    /// When we want to close the Action Buttons panel, we have to
+    /// check if it is enabled and then close it. The main reason of it
+    /// is that there is the option to click on the background of the scene
+    /// and if the panel is opened or not, we want to hide it.
+    /// </summary>
     public void TurnOff()
     {
         if (instance.gameObject.activeSelf)
             instance.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// This function sets the position of the Action Buttons panel
+    /// to the center of the selected GameplayObject.
+    /// </summary>
+    /// <param name="position"></param>
     public void UpdatePosition(Vector3 position)
     {
         instance.transform.position = position;
     }
 
+    /// <summary>
+    /// This function hide firstly the Action Button panel and secure to us 
+    /// that when the user clicks the observation button, he cannot click 
+    /// to other GameplayObject until the selected has completed its action.
+    /// </summary>
     void ObservationAction()
     {
         TurnOff();
@@ -67,6 +104,11 @@ public class ActionButtons : MonoBehaviour
         selectedGameplayObject.TransferObservation();
     }
 
+    // <summary>
+    /// This function hide firstly the Action Button panel and secure to us 
+    /// that when the user clicks the inventory button, he cannot click 
+    /// to other GameplayObject until the selected has completed its action.
+    /// </summary>
     void InventoryAction()
     {
         TurnOff();
@@ -77,6 +119,11 @@ public class ActionButtons : MonoBehaviour
         selectedGameplayObject.TransferInventory();
     }
 
+    // <summary>
+    /// This function hide firstly the Action Button panel and secure to us 
+    /// that when the user clicks the dialogue button, he cannot click 
+    /// to other GameplayObject until the selected has completed its action.
+    /// </summary>
     void DialogueAction()
     {
         TurnOff();

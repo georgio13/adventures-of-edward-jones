@@ -18,8 +18,8 @@ public class SlotItem : MonoBehaviour, IPointerDownHandler
 
         if (!slotImage.Equals(null))
         {
-            InventoryPanel.activeItem.sprite = slotImage;
-            InventoryPanel.activeItem.color = Color.white;
+            Inventory.activeItem.sprite = slotImage;
+            Inventory.activeItem.color = Color.white;
             Inventory.instance.TurnOff();
         }
     }

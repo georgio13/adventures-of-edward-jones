@@ -1,39 +1,67 @@
-﻿using System.Collections;
+﻿/**----------------------------------------------------------------
+ *  Author:         Yorgos Chatziparaskevas
+ *  Written:        11/9/2017
+ *  Last updated:   11/9/2017
+ *
+ *  File:           SubtitlesPanel.cs
+ *
+ *  This class implements the all the functions of Subtitles Panel.
+ *
+ *----------------------------------------------------------------*/
+
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SubtitlesPanel : MonoBehaviour
 {
-    public static SubtitlesPanel instance;
-    private GameObject textReference;
-    private AudioSource subtitleSound;
+    public static SubtitlesPanel instance;      // We create an instance of Subtitles Panel.
+    private AudioSource speechSource;           // The reference to the speech audio source of the scene.
 
+    /// <summary>
+    /// When we initialize the Subtitles Panel, we have to take the
+    /// reference to it and then hide it.
+    /// </summary>
     void Awake()
     {
         instance = this;
-        textReference = transform.GetChild(0).gameObject;
         instance.gameObject.SetActive(false);
+        speechSource = GameObject.Find("Speech").GetComponent<AudioSource>();
     }
 
-    public void TurnOn(GameplayObject selectedItem, string subtitleText)
+    /// <summary>
+    /// In the most cases, we the clip of speech audio source has been
+    /// changed and then we call this function to show the subtitle text
+    /// and to play the clip. Then we have to hide the Subtitles Panel
+    /// and to enable all the GameplayObjects of the scene.
+    /// </summary>
+    /// <param name="subtitleText">The subtitle text that we will show in the Subtitles Panel.</param>
+    public void TurnOn(string subtitleText)
     {
         instance.gameObject.SetActive(true);
 
-        textReference.GetComponent<Text>().text = subtitleText;
-        subtitleSound = selectedItem.GetComponent<AudioSource>();
-        subtitleSound.Play();
-        Invoke("TurnOff", subtitleSound.clip.length);
+        GetComponent<Text>().text = subtitleText;
+        speechSource.Play();
+        Invoke("TurnOff", speechSource.clip.length);
     }
 
-    public void TurnOn(GameplayObject selectedItem, string[] subtitlesText, AudioClip[] subtitlesSound)
+    /// <summary>
+    /// This function enabels the Subtitles Panel and then calls the 
+    /// PlayDialogue coroutine.
+    /// </summary>
+    /// <param name="subtitlesText">The array of texts that will be shown to the Subtitles Panel.</param>
+    /// <param name="subtitlesSound">The array of clips that will be played during the dialogue.</param>
+    public void TurnOn(string[] subtitlesText, AudioClip[] subtitlesSound)
     {
         instance.gameObject.SetActive(true);
-
-        subtitleSound = selectedItem.GetComponent<AudioSource>();
 
         StartCoroutine(PlayDialogue(subtitlesText, subtitlesSound));
     }
 
+    /// <summary>
+    /// In this function we hide the Subtitles Panel and then enable all
+    /// the GameplayObjects of the scene.
+    /// </summary>
     public void TurnOff()
     {
         instance.gameObject.SetActive(false);
@@ -42,14 +70,22 @@ public class SubtitlesPanel : MonoBehaviour
             ActionButtons.gameplayObjects[i].GetComponent<Image>().raycastTarget = true;
     }
 
+    /// <summary>
+    /// This function shows each element of the string array while the corresponding
+    /// clip is playing. When all clips has been played the function calls the 
+    /// TurnOff function.
+    /// </summary>
+    /// <param name="subtitlesText">The array of texts that will be shown to the Subtitles Panel.</param>
+    /// <param name="subtitlesSound">The array of clips that will be played during the dialogue.</param>
+    /// <returns></returns>
     IEnumerator PlayDialogue(string[] subtitlesText, AudioClip[] subtitlesSound)
     {
         for (int i = 0; i < subtitlesText.Length; i++)
         {
-            textReference.GetComponent<Text>().text = subtitlesText[i];
-            subtitleSound.GetComponent<AudioSource>().clip = subtitlesSound[i];
-            subtitleSound.Play();
-            yield return new WaitForSeconds(subtitleSound.clip.length);
+            GetComponent<Text>().text = subtitlesText[i];
+            speechSource.clip = subtitlesSound[i];
+            speechSource.Play();
+            yield return new WaitForSeconds(speechSource.clip.length);
         }
 
         TurnOff();

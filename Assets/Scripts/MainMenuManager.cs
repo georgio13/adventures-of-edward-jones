@@ -2,44 +2,64 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// 
+/// </summary>
 public class MainMenuManager : MonoBehaviour
 {
+    public AudioClip startingSoundEffects;
     public AudioClip backgroundMusic;
     private AudioSource musicSource;
     private AudioSource soundEffectsSource;
+
     private GameObject startingImage;
     private GameObject loadingImage;
     private GameObject buttonsPanel;
     private GameObject settingsPanel;
 
+    private static bool animationsPlayed = false;
+
     private void Awake()
     {
-        musicSource = transform.GetComponent<AudioSource>();
+        musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
         musicSource.volume = PlayerPrefs.GetFloat("MusicVolume");
+        musicSource.clip = backgroundMusic;
 
         soundEffectsSource = GameObject.Find("SoundEffects").GetComponent<AudioSource>();
         soundEffectsSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+        soundEffectsSource.clip = startingSoundEffects;
 
         startingImage = GameObject.Find("StartingImage");
-        loadingImage = GameObject.Find("LoadingImage");
-        buttonsPanel = GameObject.Find("ButtonsPanel");
-        settingsPanel = GameObject.Find("SettingsPanel");
 
+        loadingImage = GameObject.Find("LoadingImage");
         loadingImage.SetActive(false);
+
+        buttonsPanel = GameObject.Find("ButtonsPanel");
+
+        settingsPanel = GameObject.Find("SettingsPanel");
         settingsPanel.SetActive(false);
         
-        StartCoroutine(OpenScene());
+        if (!animationsPlayed)
+        {
+            StartCoroutine(OpenScene());
+            animationsPlayed = true;
+        }
+        else
+        {
+            musicSource.Play();
+            startingImage.SetActive(false);
+        }
     }
 
     IEnumerator OpenScene()
     {
-        yield return new WaitForSeconds(transform.GetComponent<AudioSource>().clip.length);
+        soundEffectsSource.Play();
+
+        yield return new WaitForSeconds(soundEffectsSource.clip.length);
 
         startingImage.GetComponent<Animation>().Play();
-
-        transform.GetComponent<AudioSource>().clip = backgroundMusic;
-        transform.GetComponent<AudioSource>().loop = true;
-        transform.GetComponent<AudioSource>().Play();
+        
+        musicSource.Play();
 
         yield return new WaitForSeconds(startingImage.GetComponent<Animation>().clip.length);
 
@@ -69,19 +89,22 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    public void Settings()
+    public void OpenSettings()
     {
         buttonsPanel.SetActive(false);
         settingsPanel.SetActive(true);
     }
 
-    public void goBack()
+    public void CloseSettings()
     {
         buttonsPanel.SetActive(true);
         settingsPanel.SetActive(false);
     }
 
-    public void ExitGame()
+    /// <summary>
+    /// 
+    /// </summary>
+    public void QuitGame()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
