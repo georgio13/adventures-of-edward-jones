@@ -43,6 +43,8 @@ public class StageManager : MonoBehaviour
             StartCoroutine(PlaySceneTransition());
         else if (hasChapterTransition)
             StartCoroutine(PlayChapterTransition());
+        else
+            stageInitialized = true;
     }
 
     IEnumerator PlaySceneTransition()

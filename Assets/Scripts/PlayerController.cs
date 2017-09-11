@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.Mouse0) && stageManager.stageInitialized && !SubtitlesPanel.instance.isActiveAndEnabled)
         {
             mousePosition = Input.mousePosition;
