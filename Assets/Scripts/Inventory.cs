@@ -26,15 +26,16 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// When we initialize the inventory, we have to take the reference of it
     /// and hide it. Also, we have to instantiate the nine slots which will be
-    /// the available slots for the inventory items.
+    /// the available slots for the inventory items and initialize the active
+    /// item.
     /// </summary>
     private void Awake()
     {
         instance = this;
         instance.gameObject.SetActive(false);
+        activeItem = GameObject.Find("ActiveItemIcon").GetComponent<Image>();
         slotToInsert = 0;
         inventoryPanel = gameObject;
-        activeItem = GameObject.Find("ActiveItemIcon").GetComponent<Image>();
 
         slots = new GameObject[9];
         for (int i = 0; i < slots.Length; i++)

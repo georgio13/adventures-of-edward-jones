@@ -3,22 +3,23 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    private AudioSource musicSource;
-    private AudioSource soundEffectsSource;
-    private AudioSource speechSource;
-
-    public bool hasSceneTransition;
-    private GameObject sceneTransition;
-    public AudioClip sceneTransitionClip;
-
-    public bool hasChapterTransition;
-    private GameObject chapterTransition;
-    public AudioClip backgroundClip;
-
+    private AudioSource musicSource;            // This is the reference to the music audio source.
+    private AudioSource soundEffectsSource;     // This is the reference to the sound effects audio source.
+    private AudioSource speechSource;           // This is the reference to the speech audio source.
+    public bool hasSceneTransition;             // This is true if the scene has scene transition.
+    private GameObject sceneTransition;         // This is the reference to the scene transition.
+    public AudioClip sceneTransitionClip;       // This is the clip that will be played with the scene transition.
+    public bool hasChapterTransition;           // This is true if the scene has chapter transition.
+    private GameObject chapterTransition;       // This is the reference to the chapter transition.
+    public AudioClip backgroundClip;            // This is the background music of the scene.
+    public static GameObject loadingImage;      // This is the reference to the loading image.
     public bool stageInitialized = false;
 
-    public static GameObject loadingImage;
-
+    /// <summary>
+    /// On the initialization we take the references of all the audio sources, to which 
+    /// we initialize their volumes from the saved variables. Also, we check if the scene
+    /// has scene transition or chapter transition. Furthermore, we hide the loading image.
+    /// </summary>
     private void Awake()
     {
         musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
@@ -47,6 +48,12 @@ public class StageManager : MonoBehaviour
             stageInitialized = true;
     }
 
+    /// <summary>
+    /// In this coroutine we play the clip and the animation of the scene transition and after 
+    /// we disable it. We check if there is and a chapter transition. If there is we call 
+    /// the propriate function to play it.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator PlaySceneTransition()
     {
         speechSource.clip = sceneTransitionClip;
@@ -63,6 +70,11 @@ public class StageManager : MonoBehaviour
             stageInitialized = true;
     }
 
+    /// <summary>
+    /// In this coroutine we play the animation of the chapter transition and in the middle
+    /// of it we start to play the background music of the scene.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator PlayChapterTransition()
     {
         chapterTransition.GetComponent<Animation>().Play();
@@ -76,6 +88,10 @@ public class StageManager : MonoBehaviour
         stageInitialized = true;
     }
 
+    /// <summary>
+    /// On the Update we check if the user press the space button to skip the cutscene. If he do it
+    /// we stop the cutscene and go to the chapter transition.
+    /// </summary>
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && sceneTransition.GetComponent<Animation>().isPlaying)

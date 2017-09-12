@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   11/9/2017
+ *  Last updated:   12/9/2017
  *
  *  File:           ActionButtons.cs
  *
@@ -15,34 +15,17 @@ using UnityEngine.UI;
 public class ActionButtons : MonoBehaviour
 {
     public static ActionButtons instance;               // We create an instance of Action Buttons.
-    private Button observationButton;                   // This is the reference to the observation button.
-    private Button pickUpButton;                        // This is the reference to the inventory button.
-    private Button dialogueButton;                      // This is the reference to the dialogue button.
-    private Button interactiveItemButton;               // This is the reference to the interraction button.
     public static GameplayObject[] gameplayObjects;     // This array contains all GameplayObjects which there are to the scene.
     private GameplayObject selectedGameplayObject;      // This is the selected GameplayObject.
 
     /// <summary>
     /// When we initialize Actions Buttons, we have to get the reference to them
-    /// and them hide their panel. We also must take the reference to all four 
-    /// buttons of Action Buttons panel and add to each of them a listener.
+    /// and them hide their panel. 
     /// </summary>
     void Awake()
     {
         instance = this;
         instance.gameObject.SetActive(false);
-
-        observationButton = transform.GetChild(1).GetComponent<Button>();
-        observationButton.onClick.AddListener(ObservationAction);
-
-        pickUpButton = transform.GetChild(2).GetComponent<Button>();
-        pickUpButton.onClick.AddListener(InventoryAction);
-
-        dialogueButton = transform.GetChild(3).GetComponent<Button>();
-        dialogueButton.onClick.AddListener(DialogueAction);
-
-        interactiveItemButton = transform.GetChild(4).GetComponent<Button>();
-        interactiveItemButton.onClick.AddListener(InteractiveItemAction);
     }
 
     /// <summary>
@@ -83,7 +66,7 @@ public class ActionButtons : MonoBehaviour
     /// This function sets the position of the Action Buttons panel
     /// to the center of the selected GameplayObject.
     /// </summary>
-    /// <param name="position"></param>
+    /// <param name="position">The center of the clicked item.</param>
     public void UpdatePosition(Vector3 position)
     {
         instance.transform.position = position;
@@ -94,7 +77,7 @@ public class ActionButtons : MonoBehaviour
     /// that when the user clicks the observation button, he cannot click 
     /// to other GameplayObject until the selected has completed its action.
     /// </summary>
-    void ObservationAction()
+    public void ObservationAction()
     {
         TurnOff();
 
@@ -109,7 +92,7 @@ public class ActionButtons : MonoBehaviour
     /// that when the user clicks the inventory button, he cannot click 
     /// to other GameplayObject until the selected has completed its action.
     /// </summary>
-    void InventoryAction()
+    public void InventoryAction()
     {
         TurnOff();
 
@@ -124,7 +107,7 @@ public class ActionButtons : MonoBehaviour
     /// that when the user clicks the dialogue button, he cannot click 
     /// to other GameplayObject until the selected has completed its action.
     /// </summary>
-    void DialogueAction()
+    public void DialogueAction()
     {
         TurnOff();
 
@@ -134,7 +117,7 @@ public class ActionButtons : MonoBehaviour
         selectedGameplayObject.TransferDialogue();
     }
 
-    void InteractiveItemAction()
+    public void InteractiveItemAction()
     {
 
     }
