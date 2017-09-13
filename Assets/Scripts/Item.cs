@@ -38,6 +38,10 @@ public class Item : GameplayObject
         if (isInventoryItem)
         {
             Inventory.instance.AddElement(itemName, itemIcon);
+            DataHandler.instance.data.inventory.Add(itemName);
+            DataHandler.instance.data.inventoryItems.Add(itemIcon);
+            DataHandler.instance.SaveData();
+            PlayerPrefs.SetInt("GameInitialization", 1);
             transform.GetComponent<Image>().sprite = null;
             Invoke("InventoryCheck", speechSource.clip.length);
         }

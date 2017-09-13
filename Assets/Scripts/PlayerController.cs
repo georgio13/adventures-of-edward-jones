@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
                 // If the user clicks on the background image we must turn off the action buttons and and activate all the items
                 if (hit.collider == null)
                 {
+                    Debug.Log("Enter");
                     items = FindObjectsOfType<GameplayObject>();
                     ActionButtons.instance.TurnOff();
 
@@ -71,6 +72,7 @@ public class PlayerController : MonoBehaviour
                 // If user clicks on an item or a character we want to move player to the start of the object
                 else if (hit.collider.gameObject.name.StartsWith("Item") || hit.collider.gameObject.name.StartsWith("Character"))
                 {
+                    Debug.Log(hit.collider.gameObject.name);
                     // We set the destination to put it as argument to the MoveTowards function
                     if (mousePosition.x < transform.position.x)
                         destination = new Vector2(itemPosition.x + itemStart + limit, transform.position.y);

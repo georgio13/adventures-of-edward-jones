@@ -25,6 +25,7 @@ public class MainMenuManager : MonoBehaviour
     private GameObject buttonsPanel;                    // This is the reference to the buttons of the main menu.
     private GameObject settingsPanel;                   // This is the reference to the settings panel.
     private static bool animationsPlayed = false;       // Is true when the starting animations has been played.
+    private GameObject continueButton;
 
     /// <summary>
     /// When we begin the game, we have to initialize the music and sound effects
@@ -52,6 +53,10 @@ public class MainMenuManager : MonoBehaviour
 
         settingsPanel = GameObject.Find("SettingsPanel");
         settingsPanel.SetActive(false);
+
+        continueButton = GameObject.Find("ContinueButton");
+        if (PlayerPrefs.GetInt("GameInitialization") == 0)
+            continueButton.SetActive(false);
         
         // If the animations has been played then we simply play the 
         // backgound music. Else, we play the animations.
@@ -89,7 +94,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void ContinueGame()
     {
-
+        StartCoroutine(LoadNewScene(PlayerPrefs.GetString("LastScene")));
     }
 
     /// <summary>
@@ -98,7 +103,11 @@ public class MainMenuManager : MonoBehaviour
     /// </summary>
     public void NewGame()
     {
-        StartCoroutine(LoadNewScene());
+        PlayerPrefs.SetString("LastScene", "FirstScene");
+        PlayerPrefs.SetInt("GameInitialization", 0);
+        DataHandler.instance.data = new GameData();
+        DataHandler.instance.SaveData();
+        StartCoroutine(LoadNewScene("FirstScene"));
     }
 
     /// <summary>
@@ -106,12 +115,12 @@ public class MainMenuManager : MonoBehaviour
     /// new scene is ready to initialize.
     /// </summary>
     /// <returns></returns>
-    IEnumerator LoadNewScene()
+    IEnumerator LoadNewScene(string sceneName)
     {
         loadingImage.SetActive(true);
         loadingImage.GetComponent<Animation>().Play();
 
-        AsyncOperation async = SceneManager.LoadSceneAsync("FirstScene");
+        AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
 
         while (!async.isDone)
         {

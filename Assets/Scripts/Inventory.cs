@@ -11,6 +11,8 @@
  *
  *----------------------------------------------------------------*/
 
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,6 +46,9 @@ public class Inventory : MonoBehaviour
             slots[i].transform.SetParent(inventoryPanel.transform);
             slots[i].name = "Slot " + i;
         }
+
+        for (int i = 0; i < DataHandler.instance.data.inventory.Count; i++)
+            AddElement(DataHandler.instance.data.inventory[i], DataHandler.instance.data.inventoryItems[i]);
     }
 
     /// <summary>

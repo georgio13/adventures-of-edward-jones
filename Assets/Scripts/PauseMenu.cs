@@ -73,6 +73,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void QuitToMainMenu()
     {
+        PlayerPrefs.SetString("LastScene", SceneManager.GetActiveScene().name);
         StartCoroutine(LoadNewScene());
     }
 
@@ -99,6 +100,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void QuitGame()
     {
+        PlayerPrefs.SetString("LastScene", SceneManager.GetActiveScene().name);
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

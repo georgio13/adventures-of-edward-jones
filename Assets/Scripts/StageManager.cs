@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class StageManager : MonoBehaviour
     public AudioClip backgroundClip;            // This is the background music of the scene.
     public static GameObject loadingImage;      // This is the reference to the loading image.
     public bool stageInitialized = false;
+    private Item[] gameplayObjects;
 
     /// <summary>
     /// On the initialization we take the references of all the audio sources, to which 
@@ -34,18 +37,54 @@ public class StageManager : MonoBehaviour
         loadingImage = GameObject.Find("LoadingImage");
         loadingImage.SetActive(false);
 
+        gameplayObjects = FindObjectsOfType<Item>();
+
+        for (int i = 0; i < gameplayObjects.Length; i++)
+        {
+            if (DataHandler.instance.data.inventory.Contains(gameplayObjects[i].itemName))
+            {
+                gameplayObjects[i].transform.GetComponent<Image>().sprite = null;
+                Destroy(gameplayObjects[i]);
+            }
+        }
+
         if (hasSceneTransition)
             sceneTransition = GameObject.Find("SceneTransition");
-        
+
         if (hasChapterTransition)
             chapterTransition = GameObject.Find("ChapterTransition");
 
-        if (hasSceneTransition)
-            StartCoroutine(PlaySceneTransition());
-        else if (hasChapterTransition)
-            StartCoroutine(PlayChapterTransition());
-        else
+        if (DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+        {
+            if (hasSceneTransition)
+                sceneTransition.SetActive(false);
+
+            if (hasChapterTransition)
+                chapterTransition.SetActive(false);
+
             stageInitialized = true;
+            musicSource.clip = backgroundClip;
+            musicSource.Play();
+        }
+        else
+        {
+            if (hasSceneTransition)
+                StartCoroutine(PlaySceneTransition());
+            else if (hasChapterTransition)
+                StartCoroutine(PlayChapterTransition());
+            else
+            {
+                stageInitialized = true;
+
+                if (!DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+                    DataHandler.instance.data.sceneCondition.Add(SceneManager.GetActiveScene().name);
+
+                DataHandler.instance.SaveData();
+
+                musicSource.clip = backgroundClip;
+                musicSource.Play();
+            }
+        }
     }
 
     /// <summary>
@@ -67,7 +106,14 @@ public class StageManager : MonoBehaviour
         if (hasChapterTransition)
             StartCoroutine(PlayChapterTransition());
         else
+        {
             stageInitialized = true;
+
+            if (!DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+                DataHandler.instance.data.sceneCondition.Add(SceneManager.GetActiveScene().name);
+
+            DataHandler.instance.SaveData();
+        }
     }
 
     /// <summary>
@@ -79,13 +125,21 @@ public class StageManager : MonoBehaviour
     {
         chapterTransition.GetComponent<Animation>().Play();
         musicSource.clip = backgroundClip;
-        musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
 
-        yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length);
+        yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length / 2);
+        musicSource.Play();
+        //musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
+
+        yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length / 2);
 
         chapterTransition.SetActive(false);
 
         stageInitialized = true;
+
+        if (!DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+            DataHandler.instance.data.sceneCondition.Add(SceneManager.GetActiveScene().name);
+
+        DataHandler.instance.SaveData();
     }
 
     /// <summary>
