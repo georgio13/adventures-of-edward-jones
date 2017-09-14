@@ -11,8 +11,6 @@
  *
  *----------------------------------------------------------------*/
 
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,8 +26,8 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// When we initialize the inventory, we have to take the reference of it
     /// and hide it. Also, we have to instantiate the nine slots which will be
-    /// the available slots for the inventory items and initialize the active
-    /// item.
+    /// the available slots for the inventory items and get the reference to
+    /// the active item. Finally, we load the saved inventory.
     /// </summary>
     private void Awake()
     {
@@ -83,7 +81,6 @@ public class Inventory : MonoBehaviour
     {
         slots[slotToInsert].transform.GetChild(0).GetComponent<SlotItem>().title = title;
         slots[slotToInsert].transform.GetChild(0).GetComponent<SlotItem>().GetComponent<Image>().sprite = image;
-        slots[slotToInsert].transform.GetChild(0).GetComponent<SlotItem>().GetComponent<Image>().color = Color.white;
         slotToInsert++;
     }
 }

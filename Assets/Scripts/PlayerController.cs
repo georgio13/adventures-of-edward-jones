@@ -31,6 +31,11 @@ public class PlayerController : MonoBehaviour
     private StageManager stageManager;          // We use this variable to prevent the player move before the end of clips.
     private GameplayObject[] items;             // This is the array of all items and characters in the scene.
 
+    /// <summary>
+    /// On the initialization we have to disable the animator so we can change
+    /// the first image of the player. Also, we initialize all the variables
+    /// of the scene and take reference to the Scene Manager.
+    /// </summary>
     private void Awake()
     {
         instance = this;
@@ -44,22 +49,25 @@ public class PlayerController : MonoBehaviour
         stageManager = GameObject.Find("SceneManager").GetComponent<StageManager>();
     }
 
+    /// <summary>
+    /// In the Update method we check where the user has clicked and accordingly
+    /// we set the movement of the player.
+    /// </summary>
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0) && stageManager.stageInitialized && !SubtitlesPanel.instance.isActiveAndEnabled)
         {
             mousePosition = Input.mousePosition;
-
+            
             // Get the collider of object which has been clicked
             hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-            
+
             // The collider is null if the user don't have clicked the UI buttons
             if (hit.collider == null || hit.collider.gameObject.name.StartsWith("Item") || hit.collider.gameObject.name.StartsWith("Character"))
             {
                 // If the user clicks on the background image we must turn off the action buttons and and activate all the items
                 if (hit.collider == null)
                 {
-                    Debug.Log("Enter");
                     items = FindObjectsOfType<GameplayObject>();
                     ActionButtons.instance.TurnOff();
 
@@ -72,7 +80,6 @@ public class PlayerController : MonoBehaviour
                 // If user clicks on an item or a character we want to move player to the start of the object
                 else if (hit.collider.gameObject.name.StartsWith("Item") || hit.collider.gameObject.name.StartsWith("Character"))
                 {
-                    Debug.Log(hit.collider.gameObject.name);
                     // We set the destination to put it as argument to the MoveTowards function
                     if (mousePosition.x < transform.position.x)
                         destination = new Vector2(itemPosition.x + itemStart + limit, transform.position.y);
@@ -132,5 +139,7 @@ public class PlayerController : MonoBehaviour
     {
         this.itemPosition = itemPosition;
         itemStart = itemOffset;
+        Debug.Log(this.itemPosition);
+        Debug.Log(itemStart);
     }
 }

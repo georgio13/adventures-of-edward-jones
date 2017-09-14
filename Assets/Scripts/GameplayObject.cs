@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   11/9/2017
+ *  Last updated:   14/9/2017
  *
  *  File:           GameplayObject.cs
  *
@@ -29,7 +29,7 @@ public abstract class GameplayObject : MonoBehaviour, IPointerEnterHandler, IPoi
     /// <summary>
     /// When we initialize a GameplayObject we must turn off its text.
     /// </summary>
-    void Awake()
+    private void Awake()
     {
         textReference = transform.GetChild(0).gameObject;
         textReference.SetActive(false);

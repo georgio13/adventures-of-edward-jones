@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   11/9/2017
+ *  Last updated:   14/9/2017
  *
  *  File:           SubtitlesPanel.cs
  *
@@ -22,7 +22,7 @@ public class SubtitlesPanel : MonoBehaviour
     /// When we initialize the Subtitles Panel, we have to take the
     /// reference to it and then hide it.
     /// </summary>
-    void Awake()
+   private void Awake()
     {
         instance = this;
         instance.gameObject.SetActive(false);
@@ -77,7 +77,7 @@ public class SubtitlesPanel : MonoBehaviour
     /// </summary>
     /// <param name="subtitlesText">The array of texts that will be shown to the Subtitles Panel.</param>
     /// <param name="subtitlesSound">The array of clips that will be played during the dialogue.</param>
-    /// <returns></returns>
+    /// <returns>There is nothing to return.</returns>
     IEnumerator PlayDialogue(string[] subtitlesText, AudioClip[] subtitlesSound)
     {
         for (int i = 0; i < subtitlesText.Length; i++)

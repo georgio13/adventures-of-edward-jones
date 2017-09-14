@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   12/9/2017
+ *  Last updated:   14/9/2017
  *
  *  File:           SettingsManager.cs
  *
@@ -17,7 +17,7 @@ using UnityEngine.UI;
 public class SettingsManager : MonoBehaviour
 {
     private Resolution[] resolutions;           // This is the array with the available resolutions.
-    private List<string> resolutionsList;
+    private List<string> resolutionsList;       // This is the list of resolutions that will be shown to the dropdown menu.
     private Dropdown resolutionDropdown;        // This is the reference to the resolution dropdown menu.
     private int resolutionWidth;                // This is the current resolution width.
     private int resolutionHeight;               // This is the current resolution height.
@@ -28,6 +28,9 @@ public class SettingsManager : MonoBehaviour
     private AudioSource soundEffectsSource;     // This is the reference to the sound effects audio source.
     private AudioSource speechSource;           // This is the reference to the speech audio source.
 
+    /// <summary>
+    /// On the initialization we initialize all the components with the values that are saved.
+    /// </summary>
     private void Awake()
     {
         // We get all the available resolutions and add them to a string List

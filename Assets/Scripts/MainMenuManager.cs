@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   12/9/2017
+ *  Last updated:   14/9/2017
  *
  *  File:           MainMenuManager.cs
  *
@@ -25,7 +25,7 @@ public class MainMenuManager : MonoBehaviour
     private GameObject buttonsPanel;                    // This is the reference to the buttons of the main menu.
     private GameObject settingsPanel;                   // This is the reference to the settings panel.
     private static bool animationsPlayed = false;       // Is true when the starting animations has been played.
-    private GameObject continueButton;
+    private GameObject continueButton;                  // This is the reference to the continue button.
 
     /// <summary>
     /// When we begin the game, we have to initialize the music and sound effects
@@ -54,6 +54,7 @@ public class MainMenuManager : MonoBehaviour
         settingsPanel = GameObject.Find("SettingsPanel");
         settingsPanel.SetActive(false);
 
+        // If there is not a saved game to continue, we hide the button. 
         continueButton = GameObject.Find("ContinueButton");
         if (PlayerPrefs.GetInt("GameInitialization") == 0)
             continueButton.SetActive(false);
@@ -76,7 +77,7 @@ public class MainMenuManager : MonoBehaviour
     /// When we start the game, the sounds of steps plays first and then the 
     /// fade out animation plays. After that starts to play the background music.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>There is nothing to return.</returns>
     IEnumerator OpenScene()
     {
         soundEffectsSource.Play();
@@ -92,14 +93,17 @@ public class MainMenuManager : MonoBehaviour
         startingImage.SetActive(false);
     }
 
+    /// <summary>
+    /// This function loads the last scene that the player has played.
+    /// </summary>
     public void ContinueGame()
     {
         StartCoroutine(LoadNewScene(PlayerPrefs.GetString("LastScene")));
     }
 
     /// <summary>
-    /// This function runs the command that will initialize a
-    /// new game.
+    /// This function reset the Game Data, the last scene and the variable
+    /// which affect the continue button and loads the first scene.
     /// </summary>
     public void NewGame()
     {
@@ -114,7 +118,7 @@ public class MainMenuManager : MonoBehaviour
     /// This function plays the animation of loading until the
     /// new scene is ready to initialize.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>There is nothing to return.</returns>
     IEnumerator LoadNewScene(string sceneName)
     {
         loadingImage.SetActive(true);

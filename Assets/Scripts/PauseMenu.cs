@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   12/9/2017
+ *  Last updated:   14/9/2017
  *
  *  File:           PauseMenu.cs
  *
@@ -69,7 +69,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// This function returns the user to the main menu.
+    /// This function returns the user to the main menu and saves the last scene.
     /// </summary>
     public void QuitToMainMenu()
     {
@@ -81,7 +81,7 @@ public class PauseMenu : MonoBehaviour
     /// This function plays the animation of loading until the
     /// main menu is ready to initialize.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>There is nothing to return.</returns>
     IEnumerator LoadNewScene()
     {
         StageManager.loadingImage.SetActive(true);
@@ -96,7 +96,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// This function close the game.
+    /// This function close the game and saves the last scene.
     /// </summary>
     public void QuitGame()
     {

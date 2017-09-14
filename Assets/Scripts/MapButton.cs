@@ -15,7 +15,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private Animation mapAnimation;     // The animation that will be played when we hover the button.
     public string sceneName;            // The name of scene that we want to go when we click the button.
@@ -53,7 +53,7 @@ public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     /// When we click the button we check if the scene that we want to
     /// go isn't the current. If it isn't we open it.
     /// </summary>
-    public void OnPointerClick()
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (SceneManager.GetActiveScene().name != sceneName)
             StartCoroutine(LoadNewScene());

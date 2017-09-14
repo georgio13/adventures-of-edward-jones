@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   12/9/2017
+ *  Last updated:   14/9/2017
  *
  *  File:           ActionButtons.cs
  *
@@ -22,7 +22,7 @@ public class ActionButtons : MonoBehaviour
     /// When we initialize Actions Buttons, we have to get the reference to them
     /// and them hide their panel. 
     /// </summary>
-    void Awake()
+    private void Awake()
     {
         instance = this;
         instance.gameObject.SetActive(false);

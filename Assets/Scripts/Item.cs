@@ -28,7 +28,8 @@ public class Item : GameplayObject
     /// call the TurnOn function of SubtitlePanel. Also, we have
     /// to check if the Item is invenory item and if it is we
     /// must add to the inventory and when the player finish
-    /// his phrase to detroy it.
+    /// his phrase to detroy it. Also, if the clicked item is
+    /// inventory item we update our saved data.
     /// </summary>
     public override void TransferInventory()
     {

@@ -1,4 +1,15 @@
-﻿using System.Collections;
+﻿/**----------------------------------------------------------------
+ *  Author:         Yorgos Chatziparaskevas
+ *  Written:        11/9/2017
+ *  Last updated:   14/9/2017
+ *
+ *  File:           MainMenuManager.cs
+ *
+ *  This class handles all the functionality of the scene.
+ *
+ *----------------------------------------------------------------*/
+
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,13 +26,16 @@ public class StageManager : MonoBehaviour
     private GameObject chapterTransition;       // This is the reference to the chapter transition.
     public AudioClip backgroundClip;            // This is the background music of the scene.
     public static GameObject loadingImage;      // This is the reference to the loading image.
-    public bool stageInitialized = false;
+    public bool stageInitialized = false;       // This variable help us to know when the player can move to the scene.
     private Item[] gameplayObjects;
 
     /// <summary>
     /// On the initialization we take the references of all the audio sources, to which 
     /// we initialize their volumes from the saved variables. Also, we check if the scene
-    /// has scene transition or chapter transition. Furthermore, we hide the loading image.
+    /// has scene transition or chapter transition. Furthermore, we hide the loading image
+    /// and we check which Gameplay objects are saved to our Game Data, so to hide them
+    /// from the scene and we also check if the scene is saved to our GameData so to 
+    /// skip its transitions.
     /// </summary>
     private void Awake()
     {
@@ -37,15 +51,14 @@ public class StageManager : MonoBehaviour
         loadingImage = GameObject.Find("LoadingImage");
         loadingImage.SetActive(false);
 
+        // We get all the Gameplay objects of the scene and check which are saved. 
+        // After that, we hide all the Gameplay objects which are saved.
         gameplayObjects = FindObjectsOfType<Item>();
 
         for (int i = 0; i < gameplayObjects.Length; i++)
         {
             if (DataHandler.instance.data.inventory.Contains(gameplayObjects[i].itemName))
-            {
-                gameplayObjects[i].transform.GetComponent<Image>().sprite = null;
-                Destroy(gameplayObjects[i]);
-            }
+                Destroy(gameplayObjects[i].gameObject);
         }
 
         if (hasSceneTransition)
@@ -54,8 +67,10 @@ public class StageManager : MonoBehaviour
         if (hasChapterTransition)
             chapterTransition = GameObject.Find("ChapterTransition");
 
+        // We check if the scene is saved.
         if (DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
         {
+            // If the scene is saved we hide the transitions and start to play the background music.
             if (hasSceneTransition)
                 sceneTransition.SetActive(false);
 
@@ -68,6 +83,8 @@ public class StageManager : MonoBehaviour
         }
         else
         {
+            // If the scene is not saved we play the transitions. If the scene has not transitions
+            // then we upadte our saved data which concern the scene.
             if (hasSceneTransition)
                 StartCoroutine(PlaySceneTransition());
             else if (hasChapterTransition)
@@ -90,9 +107,9 @@ public class StageManager : MonoBehaviour
     /// <summary>
     /// In this coroutine we play the clip and the animation of the scene transition and after 
     /// we disable it. We check if there is and a chapter transition. If there is we call 
-    /// the propriate function to play it.
+    /// the propriate function to play it. Also, we update our saved data which concern the scenes.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>There is nothing to return.</returns>
     IEnumerator PlaySceneTransition()
     {
         speechSource.clip = sceneTransitionClip;
@@ -118,19 +135,17 @@ public class StageManager : MonoBehaviour
 
     /// <summary>
     /// In this coroutine we play the animation of the chapter transition and in the middle
-    /// of it we start to play the background music of the scene.
+    /// of it we start to play the background music of the scene. Also, we update our saved 
+    /// data which concern the scenes.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>There is nothing to return.</returns>
     IEnumerator PlayChapterTransition()
     {
         chapterTransition.GetComponent<Animation>().Play();
         musicSource.clip = backgroundClip;
+        musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
 
-        yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length / 2);
-        musicSource.Play();
-        //musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
-
-        yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length / 2);
+        yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length);
 
         chapterTransition.SetActive(false);
 
