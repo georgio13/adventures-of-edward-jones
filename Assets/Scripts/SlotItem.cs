@@ -16,8 +16,9 @@ using UnityEngine.UI;
 
 public class SlotItem : MonoBehaviour, IPointerClickHandler
 {
-    public string title;            // This is the name of the name the slot which will help us with the interraction.
-    private Sprite slotImage;       // This is the image of the item that will be shown to the slot.
+    public string title;                // This is the name of the name the slot which will help us with the interraction.
+    private Sprite slotImage;           // This is the image of the item that will be shown to the slot.
+    public AudioClip slotItemClick;     // This is the audio clip that will play when we press a slot of the inventory.
 
     /// <summary>
     /// This is the simple constructor of the slot item.
@@ -39,6 +40,8 @@ public class SlotItem : MonoBehaviour, IPointerClickHandler
 
         if (!slotImage.Equals(null))
         {
+            StageManager.soundEffectsSource.clip = slotItemClick;
+            StageManager.soundEffectsSource.Play();
             Inventory.activeItem.sprite = slotImage;
             Inventory.instance.TurnOff();
         }

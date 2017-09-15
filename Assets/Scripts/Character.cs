@@ -24,7 +24,7 @@ public class Character : GameplayObject
     /// </summary>
     public override void TransferInventory()
     {
-        speechSource.clip = inventoryInteractionClip;
+        StageManager.speechSource.clip = inventoryInteractionClip;
         SubtitlesPanel.instance.TurnOn(inventoryInteractionText);
     }
 
@@ -44,7 +44,7 @@ public class Character : GameplayObject
     /// </summary>
     public override void TransferInteractive()
     {
-        speechSource.clip = interactiveClip;
+        StageManager.speechSource.clip = interactiveClip;
         SubtitlesPanel.instance.TurnOn(interactiveText);
     }
 }

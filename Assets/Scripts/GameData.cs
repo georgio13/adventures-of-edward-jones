@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        14/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           GameData.cs
  *
@@ -16,7 +16,6 @@ using UnityEngine;
 public class GameData
 {
     public List<string> inventory;          // This is the list with names of inventory items that there are to the inventory.
-    public List<Sprite> inventoryItems;     // This is the list with images of inventory items that there are to the inventory.
     public List<string> sceneCondition;     // This is the list with scenes that the player has played.
 
     /// <summary>
@@ -25,7 +24,6 @@ public class GameData
     public GameData()
     {
         inventory = new List<string> ();
-        inventoryItems = new List<Sprite>();
         sceneCondition = new List<string>();
     }
 }

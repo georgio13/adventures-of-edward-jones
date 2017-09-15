@@ -16,7 +16,6 @@ using UnityEngine.UI;
 public class SubtitlesPanel : MonoBehaviour
 {
     public static SubtitlesPanel instance;      // We create an instance of Subtitles Panel.
-    private AudioSource speechSource;           // The reference to the speech audio source of the scene.
 
     /// <summary>
     /// When we initialize the Subtitles Panel, we have to take the
@@ -26,7 +25,6 @@ public class SubtitlesPanel : MonoBehaviour
     {
         instance = this;
         instance.gameObject.SetActive(false);
-        speechSource = GameObject.Find("Speech").GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -41,8 +39,8 @@ public class SubtitlesPanel : MonoBehaviour
         instance.gameObject.SetActive(true);
 
         GetComponent<Text>().text = subtitleText;
-        speechSource.Play();
-        Invoke("TurnOff", speechSource.clip.length);
+        StageManager.speechSource.Play();
+        Invoke("TurnOff", StageManager.speechSource.clip.length);
     }
 
     /// <summary>
@@ -83,9 +81,9 @@ public class SubtitlesPanel : MonoBehaviour
         for (int i = 0; i < subtitlesText.Length; i++)
         {
             GetComponent<Text>().text = subtitlesText[i];
-            speechSource.clip = subtitlesSound[i];
-            speechSource.Play();
-            yield return new WaitForSeconds(speechSource.clip.length);
+            StageManager.speechSource.clip = subtitlesSound[i];
+            StageManager.speechSource.Play();
+            yield return new WaitForSeconds(StageManager.speechSource.clip.length);
         }
 
         TurnOff();

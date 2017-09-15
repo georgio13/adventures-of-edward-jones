@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   11/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           Item.cs
  *
@@ -33,18 +33,17 @@ public class Item : GameplayObject
     /// </summary>
     public override void TransferInventory()
     {
-        speechSource.clip = inventoryInteractionClip;
+        StageManager.speechSource.clip = inventoryInteractionClip;
         SubtitlesPanel.instance.TurnOn(inventoryInteractionText);
 
         if (isInventoryItem)
         {
             Inventory.instance.AddElement(itemName, itemIcon);
-            DataHandler.instance.data.inventory.Add(itemName);
-            DataHandler.instance.data.inventoryItems.Add(itemIcon);
+            DataHandler.instance.gameData.inventory.Add(itemName);
             DataHandler.instance.SaveData();
             PlayerPrefs.SetInt("GameInitialization", 1);
             transform.GetComponent<Image>().sprite = null;
-            Invoke("InventoryCheck", speechSource.clip.length);
+            Invoke("InventoryCheck", StageManager.speechSource.clip.length);
         }
     }
 
@@ -55,7 +54,7 @@ public class Item : GameplayObject
     /// </summary>
     public override void TransferDialogue()
     {
-        speechSource.clip = dialogueClip;
+        StageManager.speechSource.clip = dialogueClip;
         SubtitlesPanel.instance.TurnOn(dialogueText);
     }
 

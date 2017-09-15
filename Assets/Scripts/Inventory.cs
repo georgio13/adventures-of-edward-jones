@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   11/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           Inventory.cs
  *
@@ -12,16 +12,18 @@
  *----------------------------------------------------------------*/
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public static Inventory instance;       // We create an instance of Inventory.
-    private int slotToInsert;               // This number shows us the next available slot to insert item.
-    private GameObject inventoryPanel;      // The reference to the inventory panel.
-    public GameObject slot;                 // This is the template of slot which will be added to the inventory.
-    private GameObject[] slots;             // This is the array with the slots of the inventory. 
-    public static Image activeItem;         // The image of the active item.
+    public static Inventory instance;           // We create an instance of Inventory.
+    private int slotToInsert;                   // This number shows us the next available slot to insert item.
+    private GameObject inventoryPanel;          // The reference to the inventory panel.
+    public GameObject slot;                     // This is the template of slot which will be added to the inventory.
+    private GameObject[] slots;                 // This is the array with the slots of the inventory. 
+    public static Image activeItem;             // The image of the active item.
+    public AudioClip inventoryButtonClick;      // This is the audio clip that will play when we press the inventory button.
 
     /// <summary>
     /// When we initialize the inventory, we have to take the reference of it
@@ -32,21 +34,18 @@ public class Inventory : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        instance.gameObject.SetActive(false);
         activeItem = GameObject.Find("ActiveItemIcon").GetComponent<Image>();
         slotToInsert = 0;
         inventoryPanel = gameObject;
 
         slots = new GameObject[9];
         for (int i = 0; i < slots.Length; i++)
-        {
-            slots[i] = Instantiate(slot);
-            slots[i].transform.SetParent(inventoryPanel.transform);
-            slots[i].name = "Slot " + i;
-        }
+            slots[i] = GameObject.Find("Slot " + i);
 
-        for (int i = 0; i < DataHandler.instance.data.inventory.Count; i++)
-            AddElement(DataHandler.instance.data.inventory[i], DataHandler.instance.data.inventoryItems[i]);
+        for (int i = 0; i < DataHandler.instance.gameData.inventory.Count; i++)
+            AddElement(DataHandler.instance.gameData.inventory[i], Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + DataHandler.instance.gameData.inventory[i]));
+
+        instance.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -56,6 +55,9 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void ToggleInventory()
     {
+        StageManager.soundEffectsSource.clip = inventoryButtonClick;
+        StageManager.soundEffectsSource.Play();
+
         if (!instance.gameObject.activeSelf)
             instance.gameObject.SetActive(true);
         else

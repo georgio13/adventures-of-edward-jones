@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   12/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           MenuButton.cs
  *
@@ -16,12 +16,12 @@ using UnityEngine.EventSystems;
 
 public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private GameObject textReference;       // This is the reference to the text of the button.
-    private AudioSource buttonsAudio;       // This is the reference to the sound effects audio source.
-    public AudioClip buttonHover;           // This is the clip that will play we hover the button.
-    public AudioClip buttonClick;           // This is the clip that will play when we click the button.
-    public Color32 startColor;              // This is the start color of the button.
-    public Color32 hoverColor;              // This is the color that the button will take when we hover it.
+    private GameObject textReference;           // This is the reference to the text of the button.
+    private AudioSource soundEffectsSource;     // This is the reference to the sound effects audio source.
+    public AudioClip buttonHover;               // This is the clip that will play we hover the button.
+    public AudioClip buttonClick;               // This is the clip that will play when we click the button.
+    public Color32 startColor;                  // This is the start color of the button.
+    public Color32 hoverColor;                  // This is the color that the button will take when we hover it.
 
     /// <summary>
     /// On the initialization we take the reference to the text of the button and
@@ -30,7 +30,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private void Awake()
     {
         textReference = transform.gameObject;
-        buttonsAudio = GameObject.Find("SoundEffects").GetComponent<AudioSource>();
+        soundEffectsSource = GameObject.Find("SoundEffects").GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -41,8 +41,8 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         textReference.GetComponent<Text>().color = hoverColor;
-        buttonsAudio.clip = buttonHover;
-        buttonsAudio.Play();
+        soundEffectsSource.clip = buttonHover;
+        soundEffectsSource.Play();
     }
 
     /// <summary>
@@ -62,8 +62,8 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     public void OnPointerClick()
     {
-        buttonsAudio.clip = buttonClick;
-        buttonsAudio.Play();
+        soundEffectsSource.clip = buttonClick;
+        soundEffectsSource.Play();
         textReference.GetComponent<Text>().color = startColor;
     }
 }

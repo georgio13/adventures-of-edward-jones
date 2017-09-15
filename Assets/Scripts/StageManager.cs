@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           MainMenuManager.cs
  *
@@ -12,22 +12,23 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
-    private AudioSource musicSource;            // This is the reference to the music audio source.
-    private AudioSource soundEffectsSource;     // This is the reference to the sound effects audio source.
-    private AudioSource speechSource;           // This is the reference to the speech audio source.
-    public bool hasSceneTransition;             // This is true if the scene has scene transition.
-    private GameObject sceneTransition;         // This is the reference to the scene transition.
-    public AudioClip sceneTransitionClip;       // This is the clip that will be played with the scene transition.
-    public bool hasChapterTransition;           // This is true if the scene has chapter transition.
-    private GameObject chapterTransition;       // This is the reference to the chapter transition.
-    public AudioClip backgroundClip;            // This is the background music of the scene.
-    public static GameObject loadingImage;      // This is the reference to the loading image.
-    public bool stageInitialized = false;       // This variable help us to know when the player can move to the scene.
-    private Item[] gameplayObjects;
+    private AudioSource musicSource;                    // This is the reference to the music audio source.
+    public static AudioSource soundEffectsSource;       // This is the reference to the sound effects audio source.
+    public static AudioSource speechSource;             // This is the reference to the speech audio source.
+    public bool hasSceneTransition;                     // This is true if the scene has scene transition.
+    private GameObject sceneTransition;                 // This is the reference to the scene transition.
+    public AudioClip sceneTransitionClip;               // This is the clip that will be played with the scene transition.
+    public bool hasChapterTransition;                   // This is true if the scene has chapter transition.
+    private GameObject chapterTransition;               // This is the reference to the chapter transition.
+    private GameObject fadeOutTransition;               // This is the reference to the fade out transition.
+    public AudioClip backgroundClip;                    // This is the background music of the scene.
+    public static GameObject loadingImage;              // This is the reference to the loading image.
+    public static GameObject fadeInTransition;          // This is the reference to the fade in transition.
+    public bool stageInitialized = false;               // This variable help us to know when the player can move to the scene.
+    private Item[] gameplayObjects;                     // This array contains all the Items of the scene.
 
     /// <summary>
     /// On the initialization we take the references of all the audio sources, to which 
@@ -51,13 +52,19 @@ public class StageManager : MonoBehaviour
         loadingImage = GameObject.Find("LoadingImage");
         loadingImage.SetActive(false);
 
+        fadeOutTransition = GameObject.Find("FadeOut");
+        fadeOutTransition.SetActive(false);
+
+        fadeInTransition = GameObject.Find("FadeIn");
+        fadeInTransition.SetActive(false);
+
         // We get all the Gameplay objects of the scene and check which are saved. 
         // After that, we hide all the Gameplay objects which are saved.
         gameplayObjects = FindObjectsOfType<Item>();
 
         for (int i = 0; i < gameplayObjects.Length; i++)
         {
-            if (DataHandler.instance.data.inventory.Contains(gameplayObjects[i].itemName))
+            if (DataHandler.instance.gameData.inventory.Contains(gameplayObjects[i].itemName))
                 Destroy(gameplayObjects[i].gameObject);
         }
 
@@ -68,7 +75,7 @@ public class StageManager : MonoBehaviour
             chapterTransition = GameObject.Find("ChapterTransition");
 
         // We check if the scene is saved.
-        if (DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+        if (DataHandler.instance.gameData.sceneCondition.Contains(SceneManager.GetActiveScene().name))
         {
             // If the scene is saved we hide the transitions and start to play the background music.
             if (hasSceneTransition)
@@ -77,9 +84,8 @@ public class StageManager : MonoBehaviour
             if (hasChapterTransition)
                 chapterTransition.SetActive(false);
 
-            stageInitialized = true;
-            musicSource.clip = backgroundClip;
-            musicSource.Play();
+            fadeOutTransition.SetActive(true);
+            StartCoroutine(PlayFadeOutTransition());
         }
         else
         {
@@ -88,13 +94,17 @@ public class StageManager : MonoBehaviour
             if (hasSceneTransition)
                 StartCoroutine(PlaySceneTransition());
             else if (hasChapterTransition)
+            {
+                musicSource.clip = backgroundClip;
+                musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
                 StartCoroutine(PlayChapterTransition());
+            }
             else
             {
                 stageInitialized = true;
 
-                if (!DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
-                    DataHandler.instance.data.sceneCondition.Add(SceneManager.GetActiveScene().name);
+                if (!DataHandler.instance.gameData.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+                    DataHandler.instance.gameData.sceneCondition.Add(SceneManager.GetActiveScene().name);
 
                 DataHandler.instance.SaveData();
 
@@ -121,13 +131,17 @@ public class StageManager : MonoBehaviour
         sceneTransition.SetActive(false);
 
         if (hasChapterTransition)
+        {
+            musicSource.clip = backgroundClip;
+            musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
             StartCoroutine(PlayChapterTransition());
+        }
         else
         {
             stageInitialized = true;
 
-            if (!DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
-                DataHandler.instance.data.sceneCondition.Add(SceneManager.GetActiveScene().name);
+            if (!DataHandler.instance.gameData.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+                DataHandler.instance.gameData.sceneCondition.Add(SceneManager.GetActiveScene().name);
 
             DataHandler.instance.SaveData();
         }
@@ -142,8 +156,6 @@ public class StageManager : MonoBehaviour
     IEnumerator PlayChapterTransition()
     {
         chapterTransition.GetComponent<Animation>().Play();
-        musicSource.clip = backgroundClip;
-        musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
 
         yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length);
 
@@ -151,10 +163,29 @@ public class StageManager : MonoBehaviour
 
         stageInitialized = true;
 
-        if (!DataHandler.instance.data.sceneCondition.Contains(SceneManager.GetActiveScene().name))
-            DataHandler.instance.data.sceneCondition.Add(SceneManager.GetActiveScene().name);
+        if (!DataHandler.instance.gameData.sceneCondition.Contains(SceneManager.GetActiveScene().name))
+            DataHandler.instance.gameData.sceneCondition.Add(SceneManager.GetActiveScene().name);
 
         DataHandler.instance.SaveData();
+    }
+
+    /// <summary>
+    /// In this coroutine we play the fade out animation which will be played when
+    /// we have meet again the scene or the scene has not scene transition or chapter
+    /// transition.
+    /// </summary>
+    /// <returns>There is nothing to return.</returns>
+    IEnumerator PlayFadeOutTransition()
+    {
+        fadeOutTransition.GetComponent<Animation>().Play();
+        musicSource.clip = backgroundClip;
+        musicSource.PlayDelayed(fadeOutTransition.GetComponent<Animation>().clip.length / 2);
+
+        yield return new WaitForSeconds(fadeOutTransition.GetComponent<Animation>().clip.length);
+
+        fadeOutTransition.SetActive(false);
+
+        stageInitialized = true;
     }
 
     /// <summary>
@@ -169,7 +200,11 @@ public class StageManager : MonoBehaviour
             speechSource.Stop();
 
             if (hasChapterTransition)
+            {
+                musicSource.clip = backgroundClip;
+                musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
                 StartCoroutine(PlayChapterTransition());
+            }
         }
     }
 }

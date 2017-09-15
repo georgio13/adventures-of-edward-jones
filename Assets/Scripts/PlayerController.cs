@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        10/9/2017
- *  Last updated:   11/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           PlayerController.cs
  *
@@ -139,7 +139,5 @@ public class PlayerController : MonoBehaviour
     {
         this.itemPosition = itemPosition;
         itemStart = itemOffset;
-        Debug.Log(this.itemPosition);
-        Debug.Log(itemStart);
     }
 }

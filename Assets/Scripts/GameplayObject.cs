@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           GameplayObject.cs
  *
@@ -18,7 +18,6 @@ public abstract class GameplayObject : MonoBehaviour, IPointerEnterHandler, IPoi
 {
     private GameObject textReference;               // The reference to the name of the item or the character.
     private BoxCollider2D itemCollider;             // The collider which we use so the player know where he clicked.
-    public AudioSource speechSource;                // The reference to the speech audio source of the scene.
     public string observationText;                  // The text that will be shown when the user clicks the observation button.
     public AudioClip observationClip;               // The clip that will play when the user clicks the observation button.
     public string inventoryInteractionText;         // The text that will be shown when the user clicks the inventory button.
@@ -34,7 +33,6 @@ public abstract class GameplayObject : MonoBehaviour, IPointerEnterHandler, IPoi
         textReference = transform.GetChild(0).gameObject;
         textReference.SetActive(false);
         itemCollider = transform.GetComponent<BoxCollider2D>();
-        speechSource = GameObject.Find("Speech").GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -76,7 +74,7 @@ public abstract class GameplayObject : MonoBehaviour, IPointerEnterHandler, IPoi
     /// </summary>
     public void TransferObservation()
     {
-        speechSource.clip = observationClip;
+        StageManager.speechSource.clip = observationClip;
         SubtitlesPanel.instance.TurnOn(observationText);
     }
 

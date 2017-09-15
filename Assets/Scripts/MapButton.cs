@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   12/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           MapButton.cs
  *
@@ -17,8 +17,8 @@ using UnityEngine.SceneManagement;
 
 public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    private Animation mapAnimation;     // The animation that will be played when we hover the button.
-    public string sceneName;            // The name of scene that we want to go when we click the button.
+    private Animation mapAnimation;         // The animation that will be played when we hover the button.
+    public string sceneName;                // The name of scene that we want to go when we click the button.
 
     /// <summary>
     /// On the initialization we take the reference to the animation.
@@ -60,12 +60,17 @@ public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     }
 
     /// <summary>
-    /// This function plays the animation of loading until the
-    /// new scene is ready to initialize.
+    /// This function plays first the fade in animation and then 
+    /// the animation of loading until the new scene is ready to initialize.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>There is nothing to return.</returns>
     IEnumerator LoadNewScene()
     {
+        StageManager.fadeInTransition.SetActive(true);
+        StageManager.fadeInTransition.GetComponent<Animation>().Play();
+
+        yield return new WaitForSeconds(StageManager.fadeInTransition.GetComponent<Animation>().clip.length);
+
         StageManager.loadingImage.SetActive(true);
         StageManager.loadingImage.GetComponent<Animation>().Play();
 

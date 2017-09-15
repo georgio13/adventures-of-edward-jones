@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           MainMenuManager.cs
  *
@@ -26,6 +26,7 @@ public class MainMenuManager : MonoBehaviour
     private GameObject settingsPanel;                   // This is the reference to the settings panel.
     private static bool animationsPlayed = false;       // Is true when the starting animations has been played.
     private GameObject continueButton;                  // This is the reference to the continue button.
+    private GameObject fadeOutTransition;               // This is the reference to the fade out transition.
 
     /// <summary>
     /// When we begin the game, we have to initialize the music and sound effects
@@ -54,6 +55,9 @@ public class MainMenuManager : MonoBehaviour
         settingsPanel = GameObject.Find("SettingsPanel");
         settingsPanel.SetActive(false);
 
+        fadeOutTransition = GameObject.Find("FadeOut");
+        fadeOutTransition.SetActive(false);
+
         // If there is not a saved game to continue, we hide the button. 
         continueButton = GameObject.Find("ContinueButton");
         if (PlayerPrefs.GetInt("GameInitialization") == 0)
@@ -68,8 +72,8 @@ public class MainMenuManager : MonoBehaviour
         }
         else
         {
-            musicSource.Play();
-            startingImage.SetActive(false);
+            fadeOutTransition.SetActive(true);
+            StartCoroutine(PlayFadeOutTransition());
         }
     }
 
@@ -94,6 +98,22 @@ public class MainMenuManager : MonoBehaviour
     }
 
     /// <summary>
+    /// In this coroutine we play the fade out animation which will be played when
+    /// we return to the main menu.
+    /// </summary>
+    /// <returns>There is nothing to return.</returns>
+    IEnumerator PlayFadeOutTransition()
+    {
+        startingImage.SetActive(false);
+        fadeOutTransition.GetComponent<Animation>().Play();
+        musicSource.PlayDelayed(fadeOutTransition.GetComponent<Animation>().clip.length / 2);
+
+        yield return new WaitForSeconds(fadeOutTransition.GetComponent<Animation>().clip.length);
+
+        fadeOutTransition.SetActive(false);
+    }
+
+    /// <summary>
     /// This function loads the last scene that the player has played.
     /// </summary>
     public void ContinueGame()
@@ -109,7 +129,7 @@ public class MainMenuManager : MonoBehaviour
     {
         PlayerPrefs.SetString("LastScene", "FirstScene");
         PlayerPrefs.SetInt("GameInitialization", 0);
-        DataHandler.instance.data = new GameData();
+        DataHandler.instance.gameData = new GameData();
         DataHandler.instance.SaveData();
         StartCoroutine(LoadNewScene("FirstScene"));
     }

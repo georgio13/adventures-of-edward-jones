@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   15/9/2017
  *
  *  File:           PauseMenu.cs
  *
@@ -20,6 +20,7 @@ public class PauseMenu : MonoBehaviour
     private Text pauseMenuTitle;            // This is the reference to the pause menu title.
     private GameObject pauseMenuOptions;    // This is the reference to the pause menu options panel.
     private GameObject settingsPanel;       // This is the reference to the settings panel.
+    public AudioClip clickClip;             // This is the audio clip that will play when we press the pause button.
 
     /// <summary>
     /// On the initialization we take the reference of all elements and hide them.
@@ -43,7 +44,11 @@ public class PauseMenu : MonoBehaviour
         if (pauseMenu.activeSelf)
             pauseMenu.SetActive(false);
         else
+        {
+            StageManager.soundEffectsSource.clip = clickClip;
+            StageManager.soundEffectsSource.Play();
             pauseMenu.SetActive(true);
+        }
     }
 
     /// <summary>
@@ -78,12 +83,17 @@ public class PauseMenu : MonoBehaviour
     }
 
     /// <summary>
-    /// This function plays the animation of loading until the
-    /// main menu is ready to initialize.
+    /// This function plays first the fade in animation and then 
+    /// the animation of loading until the new scene is ready to initialize.
     /// </summary>
     /// <returns>There is nothing to return.</returns>
     IEnumerator LoadNewScene()
     {
+        StageManager.fadeInTransition.SetActive(true);
+        StageManager.fadeInTransition.GetComponent<Animation>().Play();
+
+        yield return new WaitForSeconds(StageManager.fadeInTransition.GetComponent<Animation>().clip.length);
+
         StageManager.loadingImage.SetActive(true);
         StageManager.loadingImage.GetComponent<Animation>().Play();
 
