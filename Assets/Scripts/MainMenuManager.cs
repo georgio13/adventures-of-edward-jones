@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   15/9/2017
+ *  Last updated:   16/9/2017
  *
  *  File:           MainMenuManager.cs
  *
@@ -27,6 +27,7 @@ public class MainMenuManager : MonoBehaviour
     private static bool animationsPlayed = false;       // Is true when the starting animations has been played.
     private GameObject continueButton;                  // This is the reference to the continue button.
     private GameObject fadeOutTransition;               // This is the reference to the fade out transition.
+    private GameObject fadeInTransition;                // This is the reference to the fade in transition.
 
     /// <summary>
     /// When we begin the game, we have to initialize the music and sound effects
@@ -57,6 +58,9 @@ public class MainMenuManager : MonoBehaviour
 
         fadeOutTransition = GameObject.Find("FadeOut");
         fadeOutTransition.SetActive(false);
+
+        fadeInTransition = GameObject.Find("FadeIn");
+        fadeInTransition.SetActive(false);
 
         // If there is not a saved game to continue, we hide the button. 
         continueButton = GameObject.Find("ContinueButton");
@@ -177,6 +181,20 @@ public class MainMenuManager : MonoBehaviour
     /// </summary>
     public void QuitGame()
     {
+        StartCoroutine(PlayFadeInTransition());
+    }
+
+    /// <summary>
+    /// This function plays the fade in transition when we exit the game.
+    /// </summary>
+    /// <returns>There is nothing to return.</returns>
+    IEnumerator PlayFadeInTransition()
+    {
+        StageManager.fadeInTransition.SetActive(true);
+        StageManager.fadeInTransition.GetComponent<Animation>().Play();
+
+        yield return new WaitForSeconds(StageManager.fadeInTransition.GetComponent<Animation>().clip.length);
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

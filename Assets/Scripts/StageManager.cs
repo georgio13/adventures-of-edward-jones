@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   15/9/2017
+ *  Last updated:   16/9/2017
  *
  *  File:           MainMenuManager.cs
  *
@@ -29,6 +29,7 @@ public class StageManager : MonoBehaviour
     public static GameObject fadeInTransition;          // This is the reference to the fade in transition.
     public bool stageInitialized = false;               // This variable help us to know when the player can move to the scene.
     private Item[] gameplayObjects;                     // This array contains all the Items of the scene.
+    private Coroutine sceneCoroutine;                   // This is the reference to the scene coroutine, so we can stop it.
 
     /// <summary>
     /// On the initialization we take the references of all the audio sources, to which 
@@ -92,13 +93,9 @@ public class StageManager : MonoBehaviour
             // If the scene is not saved we play the transitions. If the scene has not transitions
             // then we upadte our saved data which concern the scene.
             if (hasSceneTransition)
-                StartCoroutine(PlaySceneTransition());
+                sceneCoroutine = StartCoroutine(PlaySceneTransition());
             else if (hasChapterTransition)
-            {
-                musicSource.clip = backgroundClip;
-                musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
                 StartCoroutine(PlayChapterTransition());
-            }
             else
             {
                 stageInitialized = true;
@@ -131,11 +128,7 @@ public class StageManager : MonoBehaviour
         sceneTransition.SetActive(false);
 
         if (hasChapterTransition)
-        {
-            musicSource.clip = backgroundClip;
-            musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
             StartCoroutine(PlayChapterTransition());
-        }
         else
         {
             stageInitialized = true;
@@ -155,6 +148,8 @@ public class StageManager : MonoBehaviour
     /// <returns>There is nothing to return.</returns>
     IEnumerator PlayChapterTransition()
     {
+        musicSource.clip = backgroundClip;
+        musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
         chapterTransition.GetComponent<Animation>().Play();
 
         yield return new WaitForSeconds(chapterTransition.GetComponent<Animation>().clip.length);
@@ -177,9 +172,9 @@ public class StageManager : MonoBehaviour
     /// <returns>There is nothing to return.</returns>
     IEnumerator PlayFadeOutTransition()
     {
-        fadeOutTransition.GetComponent<Animation>().Play();
         musicSource.clip = backgroundClip;
         musicSource.PlayDelayed(fadeOutTransition.GetComponent<Animation>().clip.length / 2);
+        fadeOutTransition.GetComponent<Animation>().Play();
 
         yield return new WaitForSeconds(fadeOutTransition.GetComponent<Animation>().clip.length);
 
@@ -198,13 +193,10 @@ public class StageManager : MonoBehaviour
         {
             sceneTransition.SetActive(false);
             speechSource.Stop();
+            StopCoroutine(sceneCoroutine);
 
             if (hasChapterTransition)
-            {
-                musicSource.clip = backgroundClip;
-                musicSource.PlayDelayed(chapterTransition.GetComponent<Animation>().clip.length / 2);
                 StartCoroutine(PlayChapterTransition());
-            }
         }
     }
 }

@@ -43,7 +43,7 @@ public class Inventory : MonoBehaviour
             slots[i] = GameObject.Find("Slot " + i);
 
         for (int i = 0; i < DataHandler.instance.gameData.inventory.Count; i++)
-            AddElement(DataHandler.instance.gameData.inventory[i], Resources.Load<Sprite>(SceneManager.GetActiveScene().name + "/" + DataHandler.instance.gameData.inventory[i]));
+            AddElement(DataHandler.instance.gameData.inventory[i], Resources.Load<Sprite>(DataHandler.instance.gameData.inventory[i]));
 
         instance.gameObject.SetActive(false);
     }

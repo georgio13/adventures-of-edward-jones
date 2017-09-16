@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   15/9/2017
+ *  Last updated:   16/9/2017
  *
  *  File:           PauseMenu.cs
  *
@@ -111,6 +111,20 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         PlayerPrefs.SetString("LastScene", SceneManager.GetActiveScene().name);
+        StartCoroutine(PlayFadeInTransition());
+    }
+
+    /// <summary>
+    /// This function plays the fade in transition when we exit the game.
+    /// </summary>
+    /// <returns>There is nothing to return.</returns>
+    IEnumerator PlayFadeInTransition()
+    {
+        StageManager.fadeInTransition.SetActive(true);
+        StageManager.fadeInTransition.GetComponent<Animation>().Play();
+
+        yield return new WaitForSeconds(StageManager.fadeInTransition.GetComponent<Animation>().clip.length);
+
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
