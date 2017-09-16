@@ -53,22 +53,22 @@ public class SettingsManager : MonoBehaviour
         if (resolutionsList.Contains(Screen.currentResolution.width.ToString() + "x" + Screen.currentResolution.height.ToString()))
             resolutionDropdown.value = resolutionsList.IndexOf(Screen.currentResolution.width.ToString() + "x" + Screen.currentResolution.height.ToString());
 
-        // Set the value of the music slider
-        musicSlider = GameObject.Find("MusicSlider").GetComponent<Slider>();
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-
-        // Set the value of the sound effects slider
-        soundEffectsSlider = GameObject.Find("SoundEffectsSlider").GetComponent<Slider>();
-        soundEffectsSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume");
-
-        // Set the value of the speech slider
-        speechSlider = GameObject.Find("SpeechSlider").GetComponent<Slider>();
-        speechSlider.value = PlayerPrefs.GetFloat("SpeechVolume");
-
         // Get the references of the audio sources
         musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
         soundEffectsSource = GameObject.Find("SoundEffects").GetComponent<AudioSource>();
         speechSource = GameObject.Find("Speech").GetComponent<AudioSource>();
+
+        // Set the value of the music slider
+        musicSlider = GameObject.Find("MusicSlider").GetComponent<Slider>();
+        musicSlider.value = musicSource.volume;
+
+        // Set the value of the sound effects slider
+        soundEffectsSlider = GameObject.Find("SoundEffectsSlider").GetComponent<Slider>();
+        soundEffectsSlider.value = soundEffectsSource.volume;
+
+        // Set the value of the speech slider
+        speechSlider = GameObject.Find("SpeechSlider").GetComponent<Slider>();
+        speechSlider.value = speechSource.volume;
     }
 
     /// <summary>

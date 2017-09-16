@@ -19,6 +19,7 @@ public class MainMenuManager : MonoBehaviour
     public AudioClip backgroundMusic;                   // This is the clip of the background music.
     private AudioSource musicSource;                    // This is the reference to the music audio source.
     private AudioSource soundEffectsSource;             // This is the reference to the sound effects audio source.
+    private AudioSource speechSource;                   // This is the reference to the speech audio source.
     private GameObject startingImage;                   // This is the reference to the starting black image that shown
     private GameObject loadingImage;                    // This is the reference to the image that will be shown when the 
                                                         // new scene is loading. 
@@ -38,13 +39,26 @@ public class MainMenuManager : MonoBehaviour
     {
         // Initialization of the music audio source.
         musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
-        musicSource.volume = PlayerPrefs.GetFloat("MusicVolume");
+        if (PlayerPrefs.HasKey("MusicVolume"))
+            musicSource.volume = PlayerPrefs.GetFloat("MusicVolume");
+        else
+            musicSource.volume = 0.5f;
         musicSource.clip = backgroundMusic;
 
         // Initialization of the sound effects audio source.
         soundEffectsSource = GameObject.Find("SoundEffects").GetComponent<AudioSource>();
-        soundEffectsSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+        if (PlayerPrefs.HasKey("SoundEffectsVolume"))
+            soundEffectsSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+        else
+            soundEffectsSource.volume = 0.5f;
         soundEffectsSource.clip = startingSoundEffects;
+
+        // Initialization of the speech audio source.
+        speechSource = GameObject.Find("Speech").GetComponent<AudioSource>();
+        if (PlayerPrefs.HasKey("SpeechVolume"))
+            speechSource.volume = PlayerPrefs.GetFloat("SpeechVolume");
+        else
+            speechSource.volume = 0.5f;
 
         startingImage = GameObject.Find("StartingImage");
 
@@ -64,9 +78,14 @@ public class MainMenuManager : MonoBehaviour
 
         // If there is not a saved game to continue, we hide the button. 
         continueButton = GameObject.Find("ContinueButton");
-        if (PlayerPrefs.GetInt("GameInitialization") == 0)
+        if (PlayerPrefs.HasKey("GameInitialization"))
+        {
+            if (PlayerPrefs.GetInt("GameInitialization") == 0)
+                continueButton.SetActive(false);
+        }
+        else
             continueButton.SetActive(false);
-        
+
         // If the animations has been played then we simply play the 
         // backgound music. Else, we play the animations.
         if (!animationsPlayed)
@@ -190,10 +209,10 @@ public class MainMenuManager : MonoBehaviour
     /// <returns>There is nothing to return.</returns>
     IEnumerator PlayFadeInTransition()
     {
-        StageManager.fadeInTransition.SetActive(true);
-        StageManager.fadeInTransition.GetComponent<Animation>().Play();
+        fadeInTransition.SetActive(true);
+        fadeInTransition.GetComponent<Animation>().Play();
 
-        yield return new WaitForSeconds(StageManager.fadeInTransition.GetComponent<Animation>().clip.length);
+        yield return new WaitForSeconds(fadeInTransition.GetComponent<Animation>().clip.length);
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

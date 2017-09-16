@@ -42,13 +42,22 @@ public class StageManager : MonoBehaviour
     private void Awake()
     {
         musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
-        musicSource.volume = PlayerPrefs.GetFloat("MusicVolume");
+        if (PlayerPrefs.HasKey("MusicVolume"))
+            musicSource.volume = PlayerPrefs.GetFloat("MusicVolume");
+        else
+            musicSource.volume = 0.5f;
 
         soundEffectsSource = GameObject.Find("SoundEffects").GetComponent<AudioSource>();
-        soundEffectsSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+        if (PlayerPrefs.HasKey("SoundEffectsVolume"))
+            soundEffectsSource.volume = PlayerPrefs.GetFloat("SoundEffectsVolume");
+        else
+            soundEffectsSource.volume = 0.5f;
 
         speechSource = GameObject.Find("Speech").GetComponent<AudioSource>();
-        speechSource.volume = PlayerPrefs.GetFloat("SpeechVolume");
+        if (PlayerPrefs.HasKey("SpeechVolume"))
+            speechSource.volume = PlayerPrefs.GetFloat("SpeechVolume");
+        else
+            speechSource.volume = 0.5f;
 
         loadingImage = GameObject.Find("LoadingImage");
         loadingImage.SetActive(false);

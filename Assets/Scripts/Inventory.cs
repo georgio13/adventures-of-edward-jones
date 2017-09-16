@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   15/9/2017
+ *  Last updated:   16/9/2017
  *
  *  File:           Inventory.cs
  *
@@ -12,14 +12,12 @@
  *----------------------------------------------------------------*/
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance;           // We create an instance of Inventory.
     private int slotToInsert;                   // This number shows us the next available slot to insert item.
-    private GameObject inventoryPanel;          // The reference to the inventory panel.
     public GameObject slot;                     // This is the template of slot which will be added to the inventory.
     private GameObject[] slots;                 // This is the array with the slots of the inventory. 
     public static Image activeItem;             // The image of the active item.
@@ -36,7 +34,6 @@ public class Inventory : MonoBehaviour
         instance = this;
         activeItem = GameObject.Find("ActiveItemIcon").GetComponent<Image>();
         slotToInsert = 0;
-        inventoryPanel = gameObject;
 
         slots = new GameObject[9];
         for (int i = 0; i < slots.Length; i++)
