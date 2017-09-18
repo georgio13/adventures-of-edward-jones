@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   18/9/2017
  *
  *  File:           SlotItem.cs
  *
@@ -21,17 +21,9 @@ public class SlotItem : MonoBehaviour, IPointerClickHandler
     public AudioClip slotItemClick;     // This is the audio clip that will play when we press a slot of the inventory.
 
     /// <summary>
-    /// This is the simple constructor of the slot item.
-    /// </summary>
-    /// <param name="title">The name of the slot item.</param>
-    public SlotItem(string title)
-    {
-        this.title = title;
-    }
-
-    /// <summary>
     /// When we click a slot item, we take the reference to the image of the slot and change the active
-    /// item image, if the slot item has an image different from null.
+    /// item image, if the slot item has an image different from null. Also, we change the name of
+    /// the active item which which hold by the inventory.
     /// </summary>
     /// <param name="eventData">The data of the mouse.</param>
     public void OnPointerClick(PointerEventData eventData)
@@ -42,7 +34,8 @@ public class SlotItem : MonoBehaviour, IPointerClickHandler
         {
             StageManager.soundEffectsSource.clip = slotItemClick;
             StageManager.soundEffectsSource.Play();
-            Inventory.activeItem.sprite = slotImage;
+            Inventory.activeItemName = title;
+            Inventory.activeItemImage.sprite = slotImage;
             Inventory.instance.TurnOff();
         }
     }

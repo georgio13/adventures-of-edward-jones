@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   18/9/2017
  *
  *  File:           ActionButtons.cs
  *
@@ -117,8 +117,18 @@ public class ActionButtons : MonoBehaviour
         selectedGameplayObject.TransferDialogue();
     }
 
+    // <summary>
+    /// This function hide firstly the Action Button panel and secure to us 
+    /// that when the user clicks the interraction button, he cannot click 
+    /// to other GameplayObject until the selected has completed its action.
+    /// </summary>
     public void InteractiveItemAction()
     {
+        TurnOff();
 
+        for (int i = 0; i < gameplayObjects.Length; i++)
+            gameplayObjects[i].GetComponent<Image>().raycastTarget = false;
+
+        selectedGameplayObject.TransferInteractive();
     }
 }

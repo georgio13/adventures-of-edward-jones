@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   15/9/2017
+ *  Last updated:   18/9/2017
  *
  *  File:           Item.cs
  *
@@ -11,16 +11,20 @@
  *----------------------------------------------------------------*/
 
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class Item : GameplayObject
 {
-    public bool isInventoryItem;        // This variable inform us if the item can be added to inventory or not.
-    public Sprite itemIcon;             // This is the image that will be added to inventory if the item can be added to it.
-    public string itemName;             // This is the name with which we can contol the interractions when this item is active.
-    public string dialogueText;         // The text that will be shown when the user clicks the dialogue button. We don't add it to the super class
-                                        // because the Character must have an array of dialogue texts to implement the dialogue.
-    public AudioClip dialogueClip;      // The clip that will play when the user clicks the dialogue button.
+    public bool isInventoryItem;                // This variable inform us if the item can be added to inventory or not.
+    public Sprite itemIcon;                     // This is the image that will be added to inventory if the item can be added to it.
+    public string itemName;                     // This is the name with which we can contol the interractions when this item is active.
+    public string dialogueText;                 // The text that will be shown when the user clicks the dialogue button. We don't add it to the super class
+                                                // because the Character must have an array of dialogue texts to implement the dialogue.
+    public AudioClip dialogueClip;              // The clip that will play when the user clicks the dialogue button.
+    public string interractionName;             // This is the name that must have the active item when we interract with the current item, so if the 
+                                                // current item has an interraction function to be executed.
+    public UnityEvent interractionExtend;       // This is the reference to the function that must be executed on the interraction with the current item.
 
     /// <summary>
     /// When the user clicks the inventory button of an Item we 
@@ -58,9 +62,20 @@ public class Item : GameplayObject
         SubtitlesPanel.instance.TurnOn(dialogueText);
     }
 
+    /// <summary>
+    /// When the user clicks the interraction button of an Item we 
+    /// pass the interraction clip to the speech audio source and 
+    /// call the TurnOn function of SubtitlePanel. Also, we check
+    /// if the name of active item is the proper so call the function
+    /// that we want to be executed.
+    /// </summary>
     public override void TransferInteractive()
     {
+        StageManager.speechSource.clip = interactiveClip;
+        SubtitlesPanel.instance.TurnOn(interactiveText);
 
+        if (interractionName == Inventory.activeItemName && interractionName != "")
+            interractionExtend.Invoke();
     }
 
     /// <summary>

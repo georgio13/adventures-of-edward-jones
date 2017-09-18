@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\DataHandler.cs" />
     <Compile Include="Assets\Scripts\GameData.cs" />
     <Compile Include="Assets\Scripts\GameplayObject.cs" />
+    <Compile Include="Assets\Scripts\InterractionItemsFunctions.cs" />
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\Item.cs" />
     <Compile Include="Assets\Scripts\MainMenuManager.cs" />

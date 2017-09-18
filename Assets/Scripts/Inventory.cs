@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   16/9/2017
+ *  Last updated:   18/9/2017
  *
  *  File:           Inventory.cs
  *
@@ -20,7 +20,8 @@ public class Inventory : MonoBehaviour
     private int slotToInsert;                   // This number shows us the next available slot to insert item.
     public GameObject slot;                     // This is the template of slot which will be added to the inventory.
     private GameObject[] slots;                 // This is the array with the slots of the inventory. 
-    public static Image activeItem;             // The image of the active item.
+    public static string activeItemName;        // This is the name of the active item.
+    public static Image activeItemImage;        // The image of the active item.
     public AudioClip inventoryButtonClick;      // This is the audio clip that will play when we press the inventory button.
 
     /// <summary>
@@ -32,7 +33,7 @@ public class Inventory : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        activeItem = GameObject.Find("ActiveItemIcon").GetComponent<Image>();
+        activeItemImage = GameObject.Find("ActiveItemIcon").GetComponent<Image>();
         slotToInsert = 0;
 
         slots = new GameObject[9];

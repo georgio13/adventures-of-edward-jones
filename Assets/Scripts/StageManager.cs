@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   16/9/2017
+ *  Last updated:   18/9/2017
  *
  *  File:           MainMenuManager.cs
  *
@@ -41,6 +41,8 @@ public class StageManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        Inventory.activeItemName = "";
+
         musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
         if (PlayerPrefs.HasKey("MusicVolume"))
             musicSource.volume = PlayerPrefs.GetFloat("MusicVolume");
@@ -114,8 +116,8 @@ public class StageManager : MonoBehaviour
 
                 DataHandler.instance.SaveData();
 
-                musicSource.clip = backgroundClip;
-                musicSource.Play();
+                fadeOutTransition.SetActive(true);
+                StartCoroutine(PlayFadeOutTransition());
             }
         }
     }
@@ -132,7 +134,7 @@ public class StageManager : MonoBehaviour
         speechSource.Play();
         sceneTransition.GetComponent<Animation>().Play();
 
-        yield return new WaitForSeconds(sceneTransition.GetComponent<Animation>().clip.length);
+        yield return new WaitForSeconds(speechSource.clip.length);
 
         sceneTransition.SetActive(false);
 

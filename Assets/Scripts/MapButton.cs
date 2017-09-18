@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   16/9/2017
+ *  Last updated:   18/9/2017
  *
  *  File:           MapButton.cs
  *
@@ -11,15 +11,17 @@
  *----------------------------------------------------------------*/
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    private Animation mapAnimation;         // The animation that will be played when we hover the button.
-    public string sceneName;                // The name of scene that we want to go when we click the button.
-    public AudioClip mapButtonClick;        // This is the audio of that will be played when the user clicks a map button.
+    private Animation mapAnimation;                             // The animation that will be played when we hover the button.
+    public string sceneName;                                    // The name of scene that we want to go when we click the button.
+    public List<string> locationScenes = new List<string>();    // This is the list with the scenes that there are to same building.
+    public AudioClip mapButtonClick;                            // This is the audio of that will be played when the user clicks a map button.
 
     /// <summary>
     /// On the initialization we take the reference to the animation.
@@ -51,12 +53,12 @@ public class MapButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     /// <summary>
     /// When we click the button we play its audio clip and we check 
-    /// if the scene that we want to go isn't the current. 
+    /// if the scene that we want to go isn't in the current building. 
     /// If it isn't we open it.
     /// </summary>
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (SceneManager.GetActiveScene().name != sceneName)
+        if (!locationScenes.Contains(SceneManager.GetActiveScene().name))
         {
             StageManager.soundEffectsSource.clip = mapButtonClick;
             StartCoroutine(LoadNewScene());
