@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        14/9/2017
- *  Last updated:   14/9/2017
+ *  Last updated:   10/4/2026
  *
  *  File:           DataHandler.cs
  *
@@ -16,7 +16,7 @@ using UnityEngine;
 public class DataHandler : MonoBehaviour
 {
     public static DataHandler instance;     // We create an instance of Data Handler.
-    public GameData gameData;                   // This is the game data that we will save.
+    public GameData gameData;               // This is the game data that we will save.
     private string gameDataFileName;        // The name of file where we will save our data.
 
     /// <summary>
@@ -51,10 +51,6 @@ public class DataHandler : MonoBehaviour
         {
             string dataAsJson = File.ReadAllText(filePath);
             gameData = JsonUtility.FromJson<GameData>(dataAsJson);
-        }
-        else
-        {
-            Debug.Log("Error");
         }
     }
 }

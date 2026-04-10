@@ -11,6 +11,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
@@ -200,7 +201,7 @@ public class StageManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && sceneTransition.GetComponent<Animation>().isPlaying)
+        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame && sceneTransition.GetComponent<Animation>().isPlaying)
         {
             sceneTransition.SetActive(false);
             speechSource.Stop();

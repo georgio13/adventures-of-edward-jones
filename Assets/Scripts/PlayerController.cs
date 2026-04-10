@@ -10,6 +10,7 @@
  *----------------------------------------------------------------*/
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -55,9 +56,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && stageManager.stageInitialized && !SubtitlesPanel.instance.isActiveAndEnabled)
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame && stageManager.stageInitialized && !SubtitlesPanel.instance.isActiveAndEnabled)
         {
-            mousePosition = Input.mousePosition;
+            mousePosition = Mouse.current.position.ReadValue();
             
             // Get the collider of object which has been clicked
             hit = Physics2D.Raycast(mousePosition, Vector2.zero);
