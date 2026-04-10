@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   18/9/2017
+ *  Last updated:   10/4/2026
  *
  *  File:           MainMenuManager.cs
  *
@@ -72,7 +72,7 @@ public class StageManager : MonoBehaviour
 
         // We get all the Gameplay objects of the scene and check which are saved. 
         // After that, we hide all the Gameplay objects which are saved.
-        gameplayObjects = FindObjectsOfType<Item>();
+        gameplayObjects = FindObjectsByType<Item>();
 
         for (int i = 0; i < gameplayObjects.Length; i++)
         {

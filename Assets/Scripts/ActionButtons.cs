@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        11/9/2017
- *  Last updated:   18/9/2017
+ *  Last updated:   10/4/2026
  *
  *  File:           ActionButtons.cs
  *
@@ -37,7 +37,7 @@ public class ActionButtons : MonoBehaviour
     /// <param name="selectedGameplayObject">The GameplayObject that just has been clicked.</param>
     public void TurnOn(GameplayObject selectedGameplayObject)
     {
-        gameplayObjects = FindObjectsOfType<GameplayObject>();
+        gameplayObjects = FindObjectsByType<GameplayObject>();
 
         if (!instance.gameObject.activeSelf)
             instance.gameObject.SetActive(true);

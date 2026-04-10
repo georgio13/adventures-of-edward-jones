@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: Graduate degree
+  productName: Adventure of Edward Jones
   defaultCursor: {fileID: 2800000, guid: a9ec0e58ac8833846b5b5b9438b6e3f5, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}

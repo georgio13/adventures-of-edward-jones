@@ -1,7 +1,7 @@
 ﻿/**----------------------------------------------------------------
  *  Author:         Yorgos Chatziparaskevas
  *  Written:        10/9/2017
- *  Last updated:   15/9/2017
+ *  Last updated:   10/4/2026
  *
  *  File:           PlayerController.cs
  *
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
                 // If the user clicks on the background image we must turn off the action buttons and and activate all the items
                 if (hit.collider == null)
                 {
-                    items = FindObjectsOfType<GameplayObject>();
+                    items = FindObjectsByType<GameplayObject>();
                     ActionButtons.instance.TurnOff();
 
                     for (int i = 0; i < items.Length; i++)
